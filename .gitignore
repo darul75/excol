@@ -1,0 +1,11 @@
+node_modules
+build
+test
+src/**.js
+# User-specific stuff:
+.idea/workspace.xml
+
+coverage
+.nyc_output
+*.log
+.idea
