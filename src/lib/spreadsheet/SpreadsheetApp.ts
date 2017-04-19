@@ -1,10 +1,10 @@
 // Imports
 import { Range, CellValue } from '../range/Range'
-import {Errors} from 'excol'
-import {Sheet} from "../sheet/Sheet";
-import {Spreadsheet} from 'excol';
-import {Ui} from '../UI';
-import {DataValidationBuilder} from '../DataValidationBuilder';
+import { Errors } from '../Error'
+import { Sheet } from "../sheet/Sheet";
+import { Spreadsheet } from './Spreadsheet';
+import { Ui } from '../UI';
+import { DataValidationBuilder } from '../DataValidationBuilder';
 
 
 // Constants
@@ -23,7 +23,7 @@ const spreadsheetConfig: SpreadsheetAppConfig = {
 /**
  * SpreadsheetApp class.
  */
-export default class SpreadsheetApp {
+export class SpreadsheetApp {
 
   private cfg: SpreadsheetAppConfig;
   private _active: Spreadsheet;

@@ -785,9 +785,11 @@ export class Range {
   {
     const values = createArray(this._rowHeight, this._columnWidth);
 
+    const cells = this._gridRange ? this._gridRange._cells : this._cells;
+
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
-        const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].value;
+        const value = cells[this._row + r - 1][this._column + c - 1].value;
         const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
         values[r][c] = clone;
       }

@@ -1,11 +1,17 @@
 import { test } from 'ava';
-import { Sheet, Spreadsheet, SpreadsheetConfig } from 'excol';
+import { Range, Sheet, Spreadsheet, SpreadsheetConfig } from 'excol';
 import { User } from 'excol';
 
 const email: string = 'test@com.net';
 
 const cfg: SpreadsheetConfig = {
   name: 'test lib'
+};
+
+const cfg2: SpreadsheetConfig = {
+  name: 'test lib',
+  numRows: 4,
+  numColumns: 4
 };
 
 test('should handle addEditor ', t => {
@@ -59,6 +65,58 @@ test('should handle addViewers ', t => {
   t.deepEqual(spreadsheet.getViewers().length, 2);
 
 });
+
+test('should handle appendRow', t => {
+
+  const spreadsheet = new Spreadsheet(cfg);
+
+  t.true(spreadsheet.getLastRow() == 1);
+
+  spreadsheet.appendRow([email, email]);
+
+  const range: Range = spreadsheet.getRange('D6:E8');
+
+  range.setValues([
+    [1,2],
+    [3,4],
+    [5,6]
+  ]);
+
+  t.true(spreadsheet.getLastRow() === 9);
+  t.true(spreadsheet.getLastColumn() === 6);
+
+});
+
+test('should handle deleteColumn', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.deleteColumn(2);
+
+  const values = spreadsheet.getActiveSheet().getSheetValues(1, 1, 4, 4);
+
+  t.true(values[0][0].value === '0-0');
+  t.true(values[0][1].value === '0-2');
+  t.true(values[1][0].value === '1-0');
+  t.true(values[1][1].value === '1-2');
+
+});
+
+test('should handle deleteColumns', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.deleteColumns(2, 2);
+
+  const values = spreadsheet.getActiveSheet().getSheetValues(1, 1, 4, 4);
+
+  t.true(values[0][0].value === '0-0');
+  t.true(values[0][1].value === '0-3');
+  t.true(values[1][0].value === '1-0');
+  t.true(values[1][1].value === '1-3');
+
+});
+
 
 test('should get one sheet created on initialization', t => {
 

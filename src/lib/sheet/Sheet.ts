@@ -155,8 +155,21 @@ export class Sheet {
    * @param columnPosition
    * @returns {any}
    */
-  public deleteColumn(columnPosition: number) {
-    // TODO
+  public deleteColumn(columnPosition: number, howMany?: number) {
+    const newValues: any[][] = createArray(this._numRows, this._numColumns);
+    const values: any[][] =this._range.values;
+    const toDelNum: number = howMany ? howMany : 1;
+
+    for (var r = 0; r < values.length; r++) {
+      values[r].splice(columnPosition - 1, toDelNum);
+      for(var i = 0; i < toDelNum; i++) values[r].push(null);
+      newValues[r] = values[r];
+    }
+
+    const allRange: Range = this.getRange({row: 1, column: 1, numRows: this._numRows, numColumns: this._numColumns});
+
+    allRange.setValues(newValues);
+
     return this;
   }
 
@@ -169,18 +182,8 @@ export class Sheet {
    * @param howMany
    * @returns {Sheet}
    */
-  public deleteColumns(columnPosition: number, howMany?: number) {
-    // TODO
-    const cells = this._range.cells;
-
-    const rowCount = cells.length;
-
-    for (var r = 0; r < rowCount; r++) {
-      const allColumns = cells[r];
-
-    }
-
-    //const columnCount = values[0].length;
+  public deleteColumns(columnPosition: number, howMany: number) {
+    this.deleteColumn(columnPosition, howMany);
 
     return this;
   }
@@ -354,6 +357,21 @@ export class Sheet {
   }
 
   /**
+   * Returns the rectangular grid of values for this range starting at the given coordinates.
+   *
+   * @param startRow
+   * @param startColumn
+   * @param numRows
+   * @param numColumns
+   * @returns {any[][]}
+   */
+  public getSheetValues(startRow, startColumn, numRows, numColumns) : any[][] {
+    const range: Range = this.getRange({row: startRow, column: startColumn, numRows: numRows, numColumns: numColumns});
+
+    return range.values;
+  }
+
+  /**
    * Sets the active range for the active sheet.
    *
    * @param range
@@ -398,7 +416,10 @@ export class Sheet {
       });
     });
 
-    this._range = new Range(1, range.rowHeight, 1, range.columnWidth, null, values);
+    const newRange: Range = new Range(1, range.rowHeight, 1, range.columnWidth, null, values);
+    this._range = newRange;
+    this._active = newRange;
+
   }
 
   public get range(): Range {
@@ -506,3 +527,15 @@ const GetAcrossMultipleRowColumnRange = (sheet: Sheet, coordinates: Array<Array<
 
   return new Range(startCellRow, rowHeight, startCellColumn, columnWidth, sheet);
 };
+
+function createArray(length: number, length2?: number) {
+  var arr = new Array(length || 0),
+    i = length;
+
+  if (arguments.length > 1) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    while(i--) arr[length-1 - i] = createArray.apply(this, args);
+  }
+
+  return arr;
+}

@@ -7,8 +7,10 @@ import NamedRange from "../range/NamedRange";
 import { User } from "../User";
 
 export interface SpreadsheetConfig {
-    name: string
-}
+    name: string,
+    numRows?: number,
+    numColumns?: number
+};
 
 // Constants
 const DIMENSION = 1000;
@@ -175,7 +177,7 @@ export class Spreadsheet {
    * @returns {Sheet}
    */
   public deleteColumns(columnPosition: number, howMany: number) {
-    return this._activeSheet.deleteColumn(columnPosition);
+    return this._activeSheet.deleteColumns(columnPosition, howMany);
   }
 
   /**
@@ -379,6 +381,7 @@ export class Spreadsheet {
     // creation
     const sheet = new Sheet(cfg, this);
     this._sheets.push(sheet);
+    this._activeSheet = sheet;
     return sheet;
   }
 
