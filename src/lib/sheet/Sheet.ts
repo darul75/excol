@@ -194,8 +194,19 @@ export class Sheet {
    * @param rowPosition
    * @returns {any}
    */
-  public deleteRow(rowPosition: number) {
-    // TODO
+  public deleteRow(rowPosition: number, howMany?: number) {
+
+    const values: any[][] =this._range.values;
+    const toDelNum: number = howMany ? howMany : 1;
+
+    values.splice(rowPosition - 1, toDelNum);
+
+    for(var i = 0; i < toDelNum; i++) values.push(createArray(this._numColumns));
+
+    const allRange: Range = this.getRange({row: 1, column: 1, numRows: this._numRows, numColumns: this._numColumns});
+
+    allRange.setValues(values);
+
     return this;
   }
 
@@ -207,7 +218,7 @@ export class Sheet {
    * @returns {Sheet}
    */
   public deleteRows(rowPosition: number, howMany: number) {
-    // TODO
+    this.deleteRow(rowPosition, howMany);
     return this;
   }
 
@@ -372,6 +383,40 @@ export class Sheet {
   }
 
   /**
+   * Inserts a column after the given column position.
+   *
+   * @param afterPosition
+   */
+  public insertColumnAfter(afterPosition: number, howMany?: number) : Sheet {
+    this._range.insertColumnAfter(afterPosition);
+
+    return this;
+  }
+
+  /**
+   * Inserts a column before the given column position.
+   *
+   * @param beforePosition
+   */
+  public insertColumnBefore(beforePosition: number, howMany?: number) : Sheet {
+    this._range.insertColumnBefore(beforePosition);
+
+    return this;
+  }
+
+  /**
+   * Inserts a number of columns after the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertColumnsAfter(afterPosition: number, howMany: number) : Sheet {
+    this._range.insertColumnAfter(afterPosition, howMany);
+
+    return this;
+  }
+
+  /**
    * Sets the active range for the active sheet.
    *
    * @param range
@@ -416,7 +461,7 @@ export class Sheet {
       });
     });
 
-    const newRange: Range = new Range(1, range.rowHeight, 1, range.columnWidth, null, values);
+    const newRange: Range = new Range(1, range.rowHeight, 1, range.columnWidth, this, values);
     this._range = newRange;
     this._active = newRange;
 

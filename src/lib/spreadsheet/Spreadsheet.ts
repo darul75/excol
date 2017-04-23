@@ -212,6 +212,13 @@ export class Spreadsheet {
   }
 
   /**
+   * Duplicates the active sheet and makes it the active sheet.
+   */
+  public duplicateActiveSheet() : void {
+    // TODO
+  }
+
+  /**
    * Returns the active cell in this sheet.
    *
    * @returns {null}
@@ -246,7 +253,7 @@ export class Spreadsheet {
    *
    */
   public getDataRange() : Range {
-    return this._activeSheet.getRange({row:1, column:1, numRows:DIMENSION, numColumns:DIMENSION});
+    return this._activeSheet.getRange({row:1, column:1, numRows:this.getLastRow() - 1, numColumns:this.getLastColumn() - 1});
   }
 
   /**
@@ -319,12 +326,142 @@ export class Spreadsheet {
   }
 
   /**
+   * Returns a sheet with the given name.
+   *
+   * @param name
+   */
+  public getSheetByName(name: string) : Sheet | null {
+    const sameName = (sheet: Sheet) => sheet.getName() === name;
+    const results = this._sheets.filter(sameName);
+
+    return results.length ? results[0] : null;
+  }
+
+  /**
+   * Returns the rectangular grid of values for this range starting at the given coordinates.
+   *
+   * @param startRow
+   * @param startColumn
+   * @param numRows
+   * @param numColumns
+   * @returns {any[][]}
+   */
+  public getSheetValues(startRow, startColumn, numRows, numColumns) : any[][] {
+    return this._activeSheet.getSheetValues(startRow, startColumn, numRows, numColumns);
+  }
+
+  /**
+   * Gets all the sheets in this spreadsheet.
+   */
+  public getSheets() : Sheet[] {
+    return this._sheets;
+  }
+
+  /**
    * Gets the list of viewers and commenters for this Spreadsheet.
    *
    * @returns {User[]}
    */
   public getViewers(): User[] {
     return this._viewers;
+  }
+
+  /**
+   * Inserts a column after the given column position.
+   *
+   * @param afterPosition
+   */
+  public insertColumnAfter(afterPosition: number) : Sheet {
+    return this._activeSheet.insertColumnAfter(afterPosition);
+  }
+
+  /**
+   * Inserts a column before the given column position.
+   * @param beforePosition
+   */
+  public insertColumnBefore(beforePosition: number) : Sheet {
+    return this._activeSheet.insertColumnBefore(beforePosition);
+  }
+
+  /**
+   * Inserts a number of columns after the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertColumnsAfter(afterPosition: number, howMany: number) : Sheet {
+    return this._activeSheet.insertColumnsAfter(afterPosition, howMany);
+  }
+
+  /**
+   * Inserts a number of columns before the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertColumnsBefore(beforePosition, howMany) : Sheet {
+    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  }
+
+  /**
+   * Inserts a row after the given row position.
+   *
+   * @param afterPosition
+   */
+  public insertRowAfter(afterPosition) : Sheet {
+    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  }
+
+  /**
+   * Inserts a row before the given row position.
+   * @param beforePosition
+   */
+  public insertRowBefore(beforePosition) : Sheet {
+    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  }
+
+  /**
+   * Inserts a number of rows after the given row position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertRowsAfter(afterPosition, howMany) : Sheet {
+    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  }
+
+  /**
+   * Inserts a number of rows before the given row position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertRowsBefore(beforePosition, howMany) : Sheet {
+    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  }
+
+  /**
+   * Inserts a new sheet in the spreadsheet, with a default name. As a side effect, it makes it the active sheet.
+   *
+   * @returns {Sheet}
+   */
+  public insertSheet(sheetIndex?: number, options?: any) : Sheet {
+    // sheet props
+    const sheetIndexSuffix = this._sheets.length + 1;
+    const sheetName = sheetConfig.name + sheetIndexSuffix;
+
+    var cfg = Object.assign({}, sheetConfig, {
+      id: new Date().getTime(),
+      name: sheetName,
+      numRows: this._numRows,
+      numColumns: this._numColumns
+    });
+
+    // creation
+    const sheet = new Sheet(cfg, this);
+    this._sheets.push(sheet);
+    this._activeSheet = sheet;
+    return sheet;
   }
 
   /**
@@ -352,37 +489,6 @@ export class Spreadsheet {
   public setActiveSheet(sheet) : Sheet {
     this._activeSheet = sheet;
     return this._activeSheet;
-  }
-
-  /**
-   * Gets all the sheets in this spreadsheet.
-   */
-  public getSheets() : Sheet[] {
-    return this._sheets;
-  }
-
-  /**
-   * Inserts a new sheet in the spreadsheet, with a default name. As a side effect, it makes it the active sheet.
-   *
-   * @returns {Sheet}
-   */
-  public insertSheet() : Sheet {
-    // sheet props
-    const sheetIndexSuffix = this._sheets.length + 1;
-    const sheetName = sheetConfig.name + sheetIndexSuffix;
-
-    var cfg = Object.assign({}, sheetConfig, {
-      id: new Date().getTime(),
-      name: sheetName,
-      numRows: this._numRows,
-      numColumns: this._numColumns
-    });
-
-    // creation
-    const sheet = new Sheet(cfg, this);
-    this._sheets.push(sheet);
-    this._activeSheet = sheet;
-    return sheet;
   }
 
 }

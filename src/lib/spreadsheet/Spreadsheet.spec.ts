@@ -117,6 +117,140 @@ test('should handle deleteColumns', t => {
 
 });
 
+test('should handle deleteRow', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.deleteRow(2);
+
+  const values = spreadsheet.getActiveSheet().getSheetValues(1, 1, 4, 4);
+
+  t.true(values[0][0].value === '0-0');
+  t.true(values[1][0].value === '2-0');
+
+});
+
+test('should handle deleteRows', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.deleteRows(2, 2);
+
+  const values = spreadsheet.getActiveSheet().getSheetValues(1, 1, 4, 4);
+
+  t.true(values[0][0].value === '0-0');
+  t.true(values[1][0].value === '3-0');
+
+});
+
+test('should handle deleteSheet', t => {
+
+  const spreadsheet = new Spreadsheet(cfg);
+
+  spreadsheet.insertSheet();
+
+  const firstSheet: Sheet = spreadsheet.getSheets()[0];
+
+  spreadsheet.deleteSheet(firstSheet);
+
+  t.deepEqual(spreadsheet.getSheets().length, 1);
+  t.deepEqual(spreadsheet.getSheets()[0].getName(), 'Sheet2');
+
+});
+
+test('should handle getDataRange', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  const sheet: Sheet = spreadsheet.getActiveSheet();
+
+  const range: Range = sheet.getRange({row: 3, column: 2, numRows: 2, numColumns: 2});
+
+  range.setValues([
+    [1,2],
+    [3,4]
+  ]);
+
+  const values = spreadsheet.getDataRange().values;
+
+  t.deepEqual(values[2][1], 1);
+  t.deepEqual(values[2][2], 2);
+
+});
+
+test('should handle getNumSheets', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.insertSheet();
+  spreadsheet.insertSheet();
+  spreadsheet.insertSheet();
+
+  t.true(spreadsheet.getNumSheets() === 4);
+
+});
+
+test('should handle getSheetByName', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.insertSheet();
+  spreadsheet.insertSheet();
+  spreadsheet.insertSheet();
+
+  const sheetName = 'Sheet1';
+
+  const sheet = spreadsheet.getSheetByName(sheetName);
+
+  if (sheet !== null)
+    t.true(sheet.getName() === sheetName);
+  else
+    t.fail();
+});
+
+test('should handle insertColumnAfter', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertColumnAfter(2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 4, 5);
+
+  t.true(values[0][0] !== null);
+  t.true(values[0][2] === null);
+  t.true(spreadsheet.getLastColumn() === 6);
+});
+
+test('should handle insertColumnBefore', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertColumnBefore(2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 4, 5);
+
+  t.true(values[0][0] !== null);
+  t.true(values[0][1] === null);
+  t.true(spreadsheet.getLastColumn() === 6);
+});
 
 test('should get one sheet created on initialization', t => {
 
@@ -137,21 +271,6 @@ test('should handle insertSheet ', t => {
 
   t.deepEqual(spreadsheet.getSheets().length, 2);
   t.deepEqual(newSheet.getName(), 'Sheet2');
-
-});
-
-test('should handle deleteSheet ', t => {
-
-  const spreadsheet = new Spreadsheet(cfg);
-
-  const newSheet: Sheet = spreadsheet.insertSheet();
-
-  const firstSheet: Sheet = spreadsheet.getSheets()[0];
-
-  spreadsheet.deleteSheet(firstSheet);
-
-  t.deepEqual(spreadsheet.getSheets().length, 1);
-  t.deepEqual(spreadsheet.getSheets()[0].getName(), 'Sheet2');
 
 });
 

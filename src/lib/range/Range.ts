@@ -773,12 +773,62 @@ export class Range {
     const rowCount = values.length;
     const columnCount = values[0].length;
 
+    const cells = this._gridRange ? this._gridRange._cells : this._cells;
+
     this._parent.setLastRow(this._row + rowCount);
     this._parent.setLastColumn(this._column + columnCount);
 
     for (var r = 0; r < rowCount; r++)
       for (var c = 0; c < columnCount; c++)
-        this._gridRange._cells[this._row + r - 1][this._column + c - 1].value = values[r][c];
+        cells[this._row + r - 1][this._column + c - 1].value = values[r][c];
+  }
+
+  /**
+   * Inserts a column after the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertColumnAfter(afterPosition: number, howMany?: number) : void {
+    const cells = this._cells;
+    const rowCount = cells.length;
+    const toAddNum: number = howMany ? howMany : 1;
+
+    // + lastRow
+    const lastColumn: number = this._parent.getLastColumn();
+
+    for (var r = 0; r < rowCount; r++) {
+      const extraColumn: Cell[]= [];
+      for(var i = 0; i < toAddNum; i++) extraColumn.push(NewCell(r, i + afterPosition, null));
+
+      cells[r].splice(afterPosition, 0, ...extraColumn);
+    }
+
+    this._parent.setLastColumn(lastColumn + 1);
+  }
+
+  /**
+   * Inserts a number of columns after the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertColumnBefore(afterPosition: number, howMany?: number) : void {
+    const cells = this._cells;
+    const rowCount = cells.length;
+    const toAddNum: number = howMany ? howMany : 1;
+
+    // + lastRow
+    const lastColumn: number = this._parent.getLastColumn();
+
+    for (var r = 0; r < rowCount; r++) {
+      const extraColumn: Cell[]= [];
+      for(var i = 0; i < toAddNum; i++) extraColumn.push(NewCell(r, i + afterPosition, null));
+
+      cells[r].splice(afterPosition - 1, 0, ...extraColumn);
+    }
+
+    this._parent.setLastColumn(lastColumn + 1);
   }
 
   public get values() : any[][]
