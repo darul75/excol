@@ -14,4 +14,10 @@ export class DataValidationBuilder {
   constructor() {
   }
 
+  public requireValueInRange(range) : DataValidationBuilder {
+
+    
+    return this;
+  }
+
 }

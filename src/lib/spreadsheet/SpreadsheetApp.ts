@@ -126,7 +126,7 @@ export class SpreadsheetApp {
    * Creates a builder for a data-validation rule.
    */
   public newDataValidation() : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+    return new DataValidationBuilder();
   }
 
   /**

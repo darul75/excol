@@ -831,6 +831,56 @@ export class Range {
     this._parent.setLastColumn(lastColumn + 1);
   }
 
+  /**
+   * Inserts a row after the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertRowAfter(afterPosition: number, howMany?: number) : void {
+    const cells = this._cells;
+    const columnCount = cells[0].length;
+    const toAddNum: number = howMany ? howMany : 1;
+
+    const lastRow: number = this._parent.getLastRow();
+
+    for (var i = 0; i < toAddNum; i++) {
+      const row: Cell[] = [];
+      for (var col=0;col < columnCount; col++) {
+        row.push(NewCell(afterPosition, col, null));
+      }
+
+      cells.splice(afterPosition, 0, row);
+    }
+
+    this._parent.setLastRow(lastRow + 1);
+  }
+
+  /**
+   * Inserts a number of rows after the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertRowBefore(afterPosition: number, howMany?: number) : void {
+    const cells = this._cells;
+    const columnCount = cells[0].length;
+    const toAddNum: number = howMany ? howMany : 1;
+
+    const lastRow: number = this._parent.getLastRow();
+
+    for (var i = 0; i < toAddNum; i++) {
+      const row: Cell[] = [];
+      for (var col=0;col < columnCount; col++) {
+        row.push(NewCell(afterPosition, col, null));
+      }
+
+      cells.splice(afterPosition-1, 0, row);
+    }
+
+    this._parent.setLastRow(lastRow + 1);
+  }
+
   public get values() : any[][]
   {
     const values = createArray(this._rowHeight, this._columnWidth);

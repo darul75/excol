@@ -388,7 +388,7 @@ export class Sheet {
    * @param afterPosition
    */
   public insertColumnAfter(afterPosition: number, howMany?: number) : Sheet {
-    this._range.insertColumnAfter(afterPosition);
+    this._range.insertColumnAfter(afterPosition, howMany);
 
     return this;
   }
@@ -399,7 +399,7 @@ export class Sheet {
    * @param beforePosition
    */
   public insertColumnBefore(beforePosition: number, howMany?: number) : Sheet {
-    this._range.insertColumnBefore(beforePosition);
+    this._range.insertColumnBefore(beforePosition, howMany);
 
     return this;
   }
@@ -411,9 +411,59 @@ export class Sheet {
    * @param howMany
    */
   public insertColumnsAfter(afterPosition: number, howMany: number) : Sheet {
-    this._range.insertColumnAfter(afterPosition, howMany);
+    return this.insertColumnAfter(afterPosition, howMany);
+  }
+
+  /**
+   * Inserts a number of columns before the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertColumnsBefore(beforePosition: number, howMany: number) : Sheet {
+    return this.insertColumnBefore(beforePosition, howMany);
+  }
+
+  /**
+   * Inserts a row after the given column position.
+   *
+   * @param afterPosition
+   */
+  public insertRowAfter(afterPosition: number, howMany?: number) : Sheet {
+    this._range.insertRowAfter(afterPosition, howMany);
 
     return this;
+  }
+
+  /**
+   * Inserts a row before the given column position.
+   *
+   * @param beforePosition
+   */
+  public insertRowBefore(beforePosition: number, howMany?: number) : Sheet {
+    this._range.insertRowBefore(beforePosition, howMany);
+
+    return this;
+  }
+
+  /**
+   * Inserts a number of rows after the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertRowsAfter(afterPosition: number, howMany: number) : Sheet {
+    return this.insertRowAfter(afterPosition, howMany);
+  }
+
+  /**
+   * Inserts a number of rows before the given column position.
+   *
+   * @param afterPosition
+   * @param howMany
+   */
+  public insertRowsBefore(beforePosition: number, howMany: number) : Sheet {
+    return this.insertRowBefore(beforePosition, howMany);
   }
 
   /**

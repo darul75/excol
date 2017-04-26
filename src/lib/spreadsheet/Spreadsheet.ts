@@ -145,8 +145,10 @@ export class Spreadsheet {
   /**
    * Add named ranges in this spreadsheet.
    */
-  public addNamedRanges(name: NamedRange) : void {
-    this._namedRanges.push(name);
+  public addNamedRanges(name: string, range: Range) : void {
+    const namedRange = new NamedRange(this, name, range);
+
+    this._namedRanges.push(namedRange);
   }
 
   /**
@@ -399,8 +401,8 @@ export class Spreadsheet {
    * @param afterPosition
    * @param howMany
    */
-  public insertColumnsBefore(beforePosition, howMany) : Sheet {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public insertColumnsBefore(beforePosition: number, howMany: number) : Sheet {
+    return this._activeSheet.insertColumnBefore(beforePosition, howMany);
   }
 
   /**
@@ -408,16 +410,17 @@ export class Spreadsheet {
    *
    * @param afterPosition
    */
-  public insertRowAfter(afterPosition) : Sheet {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public insertRowAfter(afterPosition: number) : Sheet {
+    return this._activeSheet.insertRowAfter(afterPosition);
   }
 
   /**
    * Inserts a row before the given row position.
+   *
    * @param beforePosition
    */
-  public insertRowBefore(beforePosition) : Sheet {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public insertRowBefore(beforePosition: number) : Sheet {
+    return this._activeSheet.insertRowBefore(beforePosition);
   }
 
   /**
@@ -426,8 +429,8 @@ export class Spreadsheet {
    * @param afterPosition
    * @param howMany
    */
-  public insertRowsAfter(afterPosition, howMany) : Sheet {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public insertRowsAfter(afterPosition: number, howMany: number) : Sheet {
+    return this._activeSheet.insertRowsAfter(afterPosition, howMany);
   }
 
   /**
@@ -436,8 +439,8 @@ export class Spreadsheet {
    * @param afterPosition
    * @param howMany
    */
-  public insertRowsBefore(beforePosition, howMany) : Sheet {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public insertRowsBefore(beforePosition: number, howMany: number) : Sheet {
+    return this._activeSheet.insertRowsBefore(beforePosition, howMany);
   }
 
   /**

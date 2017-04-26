@@ -252,6 +252,99 @@ test('should handle insertColumnBefore', t => {
   t.true(spreadsheet.getLastColumn() === 6);
 });
 
+test('should handle insertColumnsAfter', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertColumnsAfter(2, 2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 4, 5);
+
+  t.true(values[0][0] !== null);
+  t.true(values[0][2] === null);
+  t.true(values[0][3] === null);
+  t.true(spreadsheet.getLastColumn() === 6);
+});
+
+test('should handle insertColumnsBefore', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertColumnsBefore(2, 2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 4, 5);
+
+  t.true(values[0][0] !== null);
+  t.true(values[0][1] === null);
+  t.true(values[0][2] === null);
+  t.true(spreadsheet.getLastColumn() === 6);
+});
+
+test('should handle insertRowAfter', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertRowAfter(2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 5, 4);
+
+  t.true(values[0][0] !== null);
+  t.true(values[2][0] === null);
+  t.true(spreadsheet.getLastRow() === 6);
+});
+
+test('should handle insertRowBefore', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertRowBefore(2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 5, 4);
+
+  t.true(values[0][0] !== null);
+  t.true(values[1][0] === null);
+  t.true(spreadsheet.getLastRow() === 6);
+});
+
+test.todo('should handle insertRowsAfter');
+test.todo('should handle insertRowsBefore');
+
 test('should get one sheet created on initialization', t => {
 
   const spreadsheet = new Spreadsheet(cfg);

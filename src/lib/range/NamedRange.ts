@@ -1,6 +1,6 @@
 // Imports
 
-import { Range, CellValue } from './Range'
+import { Range } from './Range'
 import { Spreadsheet } from '../spreadsheet/Spreadsheet';
 
 // Class & methods
@@ -18,7 +18,7 @@ export default class NamedRange {
    * Constructor
    *
    */
-  constructor(spreadsheet: Spreadsheet, name:string, range: Range) {
+  constructor(spreadsheet: Spreadsheet, name: string, range: Range) {
     this._parent = spreadsheet;
     this._name = name;
     this._range = range;
