@@ -1,5 +1,5 @@
 import { test } from 'ava';
-import { isTwoDimArray, isTwoDimArrayCorrectDimensions } from '../utils/mix'
+import { isTwoDimArray, isTwoDimArrayCorrectDimensions } from '../lib/utils/mix'
 import { Errors } from '../lib/Error'
 
 //describe('Mix', () => {

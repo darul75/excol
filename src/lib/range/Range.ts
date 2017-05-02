@@ -1,15 +1,26 @@
 // Import
-import  { Cell, NewCell } from '../Cell'
+import  { Cell, NewCell, clearFormat, clearContent } from '../Cell'
 import {Errors} from '../Error'
 import Fields from '../Fields'
 import { decode } from '../decoder/index'
-import { isTwoDimArray, isTwoDimArrayCorrectDimensions, isTwoDimArrayOfString, isTwoDimArrayOfNumber } from '../../utils/mix'
-import {Sheet} from '../sheet/Sheet';
+import {
+  isTwoDimArray, isTwoDimArrayCorrectDimensions, isTwoDimArrayOfString, isTwoDimArrayOfNumber,
+  isNullUndefined
+} from '../utils/mix'
+import { Sheet } from '../sheet/Sheet'
 
 // Interfaces
 
 // Range cell value type
 export interface CellValue { }
+
+// Range clear option
+export interface ClearOption {
+  commentsOnly?: boolean
+  contentsOnly?: boolean
+  formatOnly?: boolean
+  validationsOnly?: boolean
+}
 
 // Class & methods
 
@@ -28,7 +39,8 @@ export class Range {
   private _parent: Sheet;
   private _gridRange: Range;
   private _mergedRanges: Range[];
-  private _cells: any[][];
+  private _cells: Cell[][];
+  private _cellValue: CellValue | undefined;
 
   /**
    * Constructor
@@ -39,7 +51,9 @@ export class Range {
    * @param {number} columnWidth Number of columns
    * @param {Array} cells Cell values
    */
-  constructor(row: number = 0, rowHeight: number, column: number = 0, columnWidth: number, parent: Sheet | null, cells?: Array<Array<Cell>>) {
+  constructor(row: number = 0, rowHeight: number, column: number = 0, columnWidth: number,
+              parent: Sheet | null,
+              cells?: Array<Array<Cell>>) {
     this._row = row;
     this._rowHeight = rowHeight;
     this._column = column;
@@ -54,6 +68,96 @@ export class Range {
       this._gridRange = parent.range;
       this._mergedRanges = parent.mergedRanges;
     }
+  }
+
+  /**
+   * Break any multi-column cells in the range into individual cells again.
+   */
+  public breakApart() : Range {
+
+    const mergeIndexesToBeRemoved = new Array<number>();
+
+    for (var i=0; i<this._mergedRanges.length; i++) {
+      const range: Range = this._mergedRanges[i];
+
+      const isOverlapping = this.overlap(range);
+
+      if (isOverlapping) {
+
+        let error: boolean = false;
+
+        // check contained
+        const isContained = this.contains(range);
+
+        if (!isContained) throw new Error(Errors.INCORRECT_MERGE);
+
+        // remove contained range
+        if (!error && isContained) {
+          mergeIndexesToBeRemoved.push(i);
+        }
+
+      }
+    }
+
+    // Removed englobed merge
+    for (let i=0; i<mergeIndexesToBeRemoved.length; i++) {
+      this._mergedRanges.splice(mergeIndexesToBeRemoved[i]-1, 1);
+    }
+
+    this._gridRange._cells[this._row - 1][this._column -1].merged = false;
+
+    for (var r = 0; r < this._rowHeight; r++)
+      for (var c = 0; c < this._columnWidth; c++) {
+        if (!(r == 0 && c == 0)) {
+          const cell = this._gridRange._cells[this._row + r - 1][this._column + c - 1];
+          cell.merged = false;
+          cell.value = null;
+        }
+      }
+
+    return this;
+  }
+
+  /**
+   * Clears the range of contents, formats, and data-validation rules.
+   *
+   * Clears the range of contents, format, data-validation rules, and/or comments, as specified with the given advanced options.
+   * By default all data will be cleared.
+   *
+   * @param options
+   * @returns {Range}
+   */
+  public clear(options?: ClearOption) : Range {
+    if (!options) {
+      this.breakApart();
+    }
+
+    this.clearAll(options);
+
+    return this;
+  }
+
+  /**
+   * Clear all cells attributes.
+   */
+  private clearAll(options?: ClearOption) : void {
+    const hasCellValue = !isNullUndefined(this._cellValue);
+
+    for (var rx = this._row - 1; rx < this._rowHeight; rx++)
+      for (var cx = this._column - 1; cx < this._columnWidth; cx++) {
+        // default init value
+        const initialVal = hasCellValue ? this._cellValue : {value: rx + '-' + cx};
+        if (isNullUndefined(options)) {
+          this._gridRange._cells[rx][cx] = NewCell(rx, cx, initialVal);
+        } else {
+          if (options && options.formatOnly) {
+            clearFormat(this._gridRange._cells[rx][cx]);
+          }
+          if (options && options.contentsOnly) {
+            clearContent(this._gridRange._cells[rx][cx], this._cellValue);
+          }
+        }
+      }
   }
 
   /**
@@ -232,7 +336,7 @@ export class Range {
   /**
    * Returns the font size in point size of the cell in the top-left corner of the range.
    */
-  public getFontSize() : string {
+  public getFontSize() : number {
     return this._gridRange._cells[this._row - 1][this._column - 1].fontSize;
   }
 
@@ -241,7 +345,7 @@ export class Range {
    *
    * @returns font sizes
    */
-  public getFontSizes() : string[][] {
+  public getFontSizes() : number[][] {
     const sizes = createArray(this._rowHeight, this._columnWidth);
 
     for (var r = 0; r < this._rowHeight; r++)
@@ -258,7 +362,7 @@ export class Range {
    * Returns the font style ('italic' or 'normal') of the cell in the top-left corner of the range.
    */
   public getFontStyle() : string {
-    return this._gridRange._cells[this._row - 1][this._column - 1].fontSize;
+    return this._gridRange._cells[this._row - 1][this._column - 1].fontStyle;
   }
 
   /**
@@ -271,7 +375,7 @@ export class Range {
 
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
-        const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontSize;
+        const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontStyle;
         const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
         sizes[r][c] = clone;
       }
@@ -603,7 +707,7 @@ export class Range {
    *
    * @param fontStyle
    */
-  public setFontStyle(fontStyle: number) : void {
+  public setFontStyle(fontStyle: string) : void {
     this.applyProperty(Fields.FONT_STYLE, fontStyle);
   }
 
@@ -1032,7 +1136,7 @@ export class Range {
 
     const sourceValues: Object[][] = this.values;
 
-    const sourceFormats: Object[][] = this.getNumberFormats();
+    const sourceFormats: string[][] = this.getNumberFormats();
 
     for (var r = 0; r < this._rowHeight; r++) {
         const originRow: number = this._row + r - 1;
@@ -1045,52 +1149,9 @@ export class Range {
           this._gridRange._cells[targetRow][targetCol].value = sourceValues[r][c];
           // clean source
           this._gridRange._cells[originRow][originCol].value = null;
-          this._gridRange._cells[originRow][originCol].numberFormat = null;
+          this._gridRange._cells[originRow][originCol].numberFormat = '';
         }
     }
-  }
-
-  public breakApart() : void {
-
-    const mergeIndexesToBeRemoved = new Array<number>();
-
-    for (var i=0; i<this._mergedRanges.length; i++) {
-      const range: Range = this._mergedRanges[i];
-
-      const isOverlapping = this.overlap(range);
-
-      if (isOverlapping) {
-
-        let error: boolean = false;
-
-        // check contained
-        const isContained = this.contains(range);
-
-        if (!isContained) throw new Error(Errors.INCORRECT_MERGE);
-
-        // remove contained range
-        if (!error && isContained) {
-          mergeIndexesToBeRemoved.push(i);
-        }
-
-      }
-    }
-
-    // Removed englobed merge
-    for (let i=0; i<mergeIndexesToBeRemoved.length; i++) {
-      this._mergedRanges.splice(mergeIndexesToBeRemoved[i]-1, 1);
-    }
-
-    this._gridRange._cells[this._row - 1][this._column -1].merged = false;
-
-    for (var r = 0; r < this._rowHeight; r++)
-      for (var c = 0; c < this._columnWidth; c++) {
-        if (!(r == 0 && c == 0)) {
-          const cell = this._gridRange._cells[this._row + r - 1][this._column + c - 1];
-          cell.merged = false;
-          cell.value = null;
-        }
-      }
   }
 
   overlap(other: Range) {
@@ -1133,6 +1194,11 @@ export class Range {
 
   public get columnWidth() {
     return this._columnWidth;
+  }
+
+  public set cellValue(value: CellValue | undefined) {
+    if (!isNullUndefined(value))
+      this._cellValue = value;
   }
 
   private applyProperty(propName: string, propValue : any) : void {

@@ -2,8 +2,9 @@
 import  { Cell, NewCell } from '../Cell'
 import { Range, CellValue } from '../range/Range'
 import { toCoordinates, validateA1 } from '../converter/ToCoordinates'
-import {Errors} from '../Error'
-import {Spreadsheet} from '../spreadsheet/Spreadsheet';
+import { Errors } from '../Error'
+import { Spreadsheet } from '../spreadsheet/Spreadsheet'
+import { isNullUndefined } from '../utils/mix'
 
 // Interfaces
 export interface Dimension {
@@ -38,7 +39,7 @@ const DIMENSION = 1000;
 export class Sheet {
 
   private _parent: Spreadsheet;
-  private cfg: SheetConfig;
+  private _config: SheetConfig;
   private _range: Range;
   private _active: Range;
   private _mergedRanges: Range[] = [];
@@ -53,16 +54,16 @@ export class Sheet {
   /**
    * Constructor
    *
-   * @param {object?} cfg Sheet configuration
+   * @param {object?} config Sheet configuration
    */
-  constructor(cfg: SheetConfig, parent?: Spreadsheet) {
-    this.cfg = cfg;
+  constructor(config: SheetConfig, parent?: Spreadsheet) {
+    this._config = config;
 
     if (parent) {
       this._parent = parent;
     }
 
-    this.init(this.cfg);
+    this.init(this._config);
   }
 
   /**
@@ -80,7 +81,7 @@ export class Sheet {
     this._numRows = numRows;
     this._numColumns = numColumns;
 
-    this.initRange(new Range(1, numRows, 1, numColumns, null), cellValue);
+    this.initRange(new Range(1, numRows, 1, numColumns, this), cellValue);
   }
 
   /**
@@ -305,6 +306,9 @@ export class Sheet {
       numColumns = numColumns || 1;
 
       range = new Range(row, numRows, column, numColumns, this);
+
+      if (!isNullUndefined(this._config.cellValue))
+        range.cellValue = this._config.cellValue;
     }
 
     this._active = range;
@@ -517,6 +521,10 @@ export class Sheet {
 
   }
 
+  public get config(): SheetConfig {
+    return this._config;
+  }
+
   public get range(): Range {
     return this._range;
   }
@@ -543,7 +551,12 @@ const GetSingleCellOrWholeRowColumnRange = (sheet: Sheet, coordinates: Array<num
   const rowHeight = allRows ? sheet._numRows : 1;
   const columnWidth = allColumns ? sheet._numColumns : 1;
 
-  return new Range(row, rowHeight, column, columnWidth, sheet);
+  const range: Range = new Range(row, rowHeight, column, columnWidth, sheet);
+
+  if (!isNullUndefined(sheet.config.cellValue))
+    range.cellValue = sheet.config.cellValue;
+
+  return range;
 };
 
 const GetAcrossMultipleRowColumnRange = (sheet: Sheet, coordinates: Array<Array<number>>) : Range => {
@@ -620,7 +633,12 @@ const GetAcrossMultipleRowColumnRange = (sheet: Sheet, coordinates: Array<Array<
     columnWidth = endCellColumn - startCellColumn + 1;
   }
 
-  return new Range(startCellRow, rowHeight, startCellColumn, columnWidth, sheet);
+  const range: Range = new Range(startCellRow, rowHeight, startCellColumn, columnWidth, sheet);
+
+  if (!isNullUndefined(sheet.config.cellValue))
+    range.cellValue = sheet.config.cellValue;
+
+  return range;
 };
 
 function createArray(length: number, length2?: number) {

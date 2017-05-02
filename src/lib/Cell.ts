@@ -1,3 +1,4 @@
+import {CellValue} from "excol";
 export interface Cell {
     row: number;
     column: number;
@@ -8,25 +9,46 @@ export interface Cell {
     fontLine: string;
     fontSize: number;
     fontStyle: string;
-    fontWeight: number;
+    fontWeight: string;
     formula: string;
     horizontalAlignment: string,
+    merged: boolean,
     note: string,
     value: any;
     verticalAlignment: string
 }
 
-// TODO create cell factory
+export const DefaultFontLine: string = 'none';
+export const DefaultFontSize: number = 10;
+export const DefaultFontStyle: string = 'normal';
+export const DefaultFontWeight: string = 'normal';
+export const DefaultEmptyString: string = '';
+
 export const NewCell = (row: number, column: number, value: any) : Cell => {
   return {
       row: row, column: column,
-      background: '',
-      fontColor: '', fontFamily: '', fontStyle: '', fontLine: '', fontSize: 10, fontWeight: 0,
-      formula: '',
+      background: DefaultEmptyString,
+      fontColor: DefaultEmptyString, fontFamily: DefaultEmptyString, fontStyle: DefaultFontStyle, fontLine: DefaultFontLine, fontSize: DefaultFontSize, fontWeight: DefaultFontWeight,
+      formula: DefaultEmptyString,
       horizontalAlignment: 'left',
-      note: '',
-      numberFormat: '',
+      merged: false,
+      note: DefaultEmptyString,
+      numberFormat: DefaultEmptyString,
       value: value,
       verticalAlignment: 'top'
   };
 };
+
+export const clearContent = (cell: Cell, cellValue: CellValue | undefined) : void => {
+  cell.value = cellValue;
+};
+
+export const clearFormat = (cell: Cell) : void => {
+  cell.fontColor = DefaultEmptyString;
+  cell.fontFamily = DefaultEmptyString;
+  cell.fontLine = DefaultFontLine;
+  cell.fontSize = DefaultFontSize;
+  cell.fontStyle = DefaultFontStyle;
+  cell.fontWeight = DefaultFontWeight;
+};
+

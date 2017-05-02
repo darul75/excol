@@ -1,4 +1,4 @@
-import { Errors } from '../lib/Error'
+import { Errors } from '../Error'
 
 export const isTwoDimArray = (o : any) : void => {
     if (!(o.constructor === Array && o[0] && o[0].constructor === Array)) {
@@ -33,4 +33,4 @@ export const isTwoDimArrayOfNumber = (o : any, rows: number, columns: number) : 
     return true;
 };
 
-
+export const isNullUndefined = (o : any) : boolean => o == null || o == undefined;
