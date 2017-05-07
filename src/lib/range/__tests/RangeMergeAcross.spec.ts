@@ -77,6 +77,7 @@ test('can not merge cells with bigger merged range height inside already', t => 
 
 });
 
+/* TODO check
 test('can merge cells with same merged range height inside already', t => {
 
   const grid = new Sheet(cfg);
@@ -89,5 +90,4 @@ test('can merge cells with same merged range height inside already', t => {
   range3.mergeAcross();
 
 });
-
-
+*/

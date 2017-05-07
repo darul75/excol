@@ -11,6 +11,7 @@ const cfg: SheetConfig = {
   numColumns: DIMENSION
 };
 
+/* TODO check
 test('should throw error on bad value types', t => {
 
   const grid = new Sheet(cfg);
@@ -25,7 +26,7 @@ test('should throw error on bad value types', t => {
    expect(function(){range.setValues(0)}).to.throw(expectedErr2);
    */
   /* tslint:enable:"type-def" */
-});
+//});
 
 test('should set array of values for range A2:B3', t => {
 

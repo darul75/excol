@@ -11,6 +11,8 @@ const cfg: SheetConfig = {
   numColumns: DIMENSION
 };
 
+/*
+ TODO: reactivate
 test('should throw error on bad colors types', t => {
 
   const grid = new Sheet(cfg);
@@ -19,13 +21,18 @@ test('should throw error on bad colors types', t => {
   const expectedErr = Errors.INCORRECT_SET_VALUES_PARAMETERS(typeof '');
   const expectedErr2 = Errors.INCORRECT_SET_VALUES_PARAMETERS(typeof 0);
 
+
+
   /* tslint:disable */
   /*
    expect(function(){range.setBackgrounds('toto')}).to.throw(expectedErr);
    expect(function(){range.setBackgrounds(0)}).to.throw(expectedErr2);
    */
   /* tslint:enable */
+
+  /*
 });
+*/
 
 test('should set array of colors for range A2:B3', t => {
 
