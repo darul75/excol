@@ -1,6 +1,6 @@
 {
   "name": "excol",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "keywords": [
     "excel"
@@ -92,7 +92,7 @@
   },
   "homepage": "https://github.com/darul75/excol#readme",
   "dependencies": {
-    "source-map-support": "^0.4.0"
+    "tslib": "^1.6.0"
   },
   "nyc": {
     "exclude": [
@@ -106,8 +106,5 @@
       "build/**/*.js",
       "!build/**/*.spec.js"
     ]
-  },
-  "dependencies": {
-    "tslib": "^1.6.0"
   }
 }
