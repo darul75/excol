@@ -1,6 +1,6 @@
 # excol
 
-[![Build Status](https://travis-ci.org/darul75/excol.svg?branch=master)](https://travis-ci.org/darul75/excol)
+[![Build Status](https://travis-ci.org/darul75/excol.svg?branch=master)](https://travis-ci.org/darul75/excol) [![codecov](https://codecov.io/gh/darul75/excol/branch/master/graph/badge.svg)](https://codecov.io/gh/darul75/excol)
 
 Library to mock excel(-like) solutions in Javascript.
 
