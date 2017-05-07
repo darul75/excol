@@ -21,6 +21,7 @@ export const isTwoDimArrayCorrectDimensions = (o : any, rows: number, columns: n
     }
 };
 
+
 export const isTwoDimArrayOfString = (o : any, rows: number, columns: number) : boolean => {
     isTwoDimArrayCorrectDimensions(o, rows, columns);
 
@@ -31,6 +32,12 @@ export const isTwoDimArrayOfNumber = (o : any, rows: number, columns: number) : 
     isTwoDimArrayCorrectDimensions(o, rows, columns);
 
     return true;
+};
+
+export const isTwoDimArrayOfDataValidation = (o : any, rows: number, columns: number) : boolean => {
+  isTwoDimArrayCorrectDimensions(o, rows, columns);
+
+  return true;
 };
 
 export const isNullUndefined = (o : any) : boolean => o == null || o == undefined;

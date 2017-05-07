@@ -1,4 +1,10 @@
+import { Errors } from '../Error'
+import { decode } from '../decoder/index'
+import { Cell } from '../Cell';
+import { DataValidation } from '../validation/DataValidation';
+
 export enum DataValidationCriteria {
+  ANY,
   DATE_AFTER,
   DATE_BEFORE,
   DATE_BETWEEN,
@@ -24,3 +30,13 @@ export enum DataValidationCriteria {
   VALUE_IN_RANGE,
   CUSTOM_FORMULA
 };
+
+export const validators = {
+  10 : function(row, column, cellValue: Object, validation : DataValidation) {
+    if (cellValue !== validation.getCriteriaValues()[0]) {
+      throw new Error(Errors.INCORRECT_RANGE_DATA_VALIDATION(getA1Notation(row, column)));
+    }
+  }
+};
+
+const getA1Notation = (row: number, column: number) => decode(column) + row;

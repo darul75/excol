@@ -1,5 +1,7 @@
 // Imports
-import { Errors } from '../Error';
+import { DataValidation } from './DataValidation';
+import { DataValidationCriteria } from './DataValidationCriteria';
+import { Range } from '../range/Range';
 
 // Class & methods
 
@@ -8,10 +10,10 @@ import { Errors } from '../Error';
  */
 export class DataValidationBuilder {
 
-  private _date: boolean;
-  private _dateAfter: Date;
-  private _dateBefore: Date;
-  private _dateBetween: Date[];
+  private _allowInvalid: boolean = true;
+  private _helpText: string = '';
+  private _type: DataValidationCriteria;
+  private _values: Object[] = [];
 
   /**
    * Constructor
@@ -20,14 +22,17 @@ export class DataValidationBuilder {
   constructor() {
   }
 
+  public build() : DataValidation {
+    return new DataValidation(this._allowInvalid, this._helpText, this._type, this._values);
+  }
+
   /**
    * Sets the data-validation rule to require a date.
    *
    * @returns {DataValidationBuilder}
    */
   public requireDate() : DataValidationBuilder {
-    this._date = true;
-
+    this._type = DataValidationCriteria.DATE_IS_VALID_DATE;
     return this;
   }
 
@@ -38,7 +43,8 @@ export class DataValidationBuilder {
    * @param date
    */
   public requireDateAfter(date: Date) : DataValidationBuilder {
-    this._dateAfter = date;
+    this._type = DataValidationCriteria.DATE_AFTER;
+    this._values.push(date);
     return this;
   }
 
@@ -47,7 +53,8 @@ export class DataValidationBuilder {
    * The time fields of the Date object are ignored; only the day, month, and year fields are used.
    */
   public requireDateBefore(date: Date) : DataValidationBuilder {
-    this._dateBefore = date;
+    this._type = DataValidationCriteria.DATE_BEFORE;
+    this._values.push(date);
     return this;
   }
 
@@ -59,9 +66,9 @@ export class DataValidationBuilder {
    * @param end
    */
   public requireDateBetween(start: Date, end: Date) : DataValidationBuilder {
-    this._dateBetween.push(start);
-    this._dateBetween.push(end);
-
+    this._type = DataValidationCriteria.DATE_BETWEEN;
+    this._values.push(start);
+    this._values.push(end);
     return this;
   }
 
@@ -71,8 +78,10 @@ export class DataValidationBuilder {
    *
    * @param date
    */
-  public requireDateEqualTo(date) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireDateEqualTo(date: Date) : DataValidationBuilder {
+    this._type = DataValidationCriteria.DATE_EQUAL_TO;
+    this._values.push(date);
+    return this;
   }
 
   /**
@@ -82,8 +91,11 @@ export class DataValidationBuilder {
    * @param start
    * @param end
    */
-  public requireDateNotBetween(start, end) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireDateNotBetween(start: Date, end: Date) : DataValidationBuilder {
+    this._type = DataValidationCriteria.DATE_NOT_BETWEEN;
+    this._values.push(start);
+    this._values.push(end);
+    return this;
   }
 
   /**
@@ -92,8 +104,10 @@ export class DataValidationBuilder {
    *
    * @param date
    */
-  public requireDateOnOrAfter(date) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireDateOnOrAfter(date: Date) : DataValidationBuilder {
+    this._type = DataValidationCriteria.DATE_ON_OR_AFTER;
+    this._values.push(date);
+    return this;
   }
 
   /**
@@ -102,8 +116,10 @@ export class DataValidationBuilder {
    *
    * @param date
    */
-  public requireDateOnOrBefore(date) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireDateOnOrBefore(date: Date) : DataValidationBuilder {
+    this._type = DataValidationCriteria.DATE_ON_OR_BEFORE;
+    this._values.push(date);
+    return this;
   }
 
   /**
@@ -111,8 +127,10 @@ export class DataValidationBuilder {
    *
    * @param formula
    */
-  public requireFormulaSatisfied(formula) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireFormulaSatisfied(formula: string) : DataValidationBuilder {
+    this._type = DataValidationCriteria.CUSTOM_FORMULA;
+    this._values.push(formula);
+    return this;
   }
 
   /**
@@ -121,8 +139,11 @@ export class DataValidationBuilder {
    * @param start
    * @param end
    */
-  public requireNumberBetween(start, end) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberBetween(start: number, end: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_BETWEEN;
+    this._values.push(start);
+    this._values.push(end);
+    return this;
   }
 
   /**
@@ -130,8 +151,10 @@ export class DataValidationBuilder {
    *
    * @param number
    */
-  public requireNumberEqualTo(number) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberEqualTo(number: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_EQUAL_TO;
+    this._values.push(number);
+    return this;
   }
 
   /**
@@ -139,8 +162,10 @@ export class DataValidationBuilder {
    *
    * @param number
    */
-  public requireNumberGreaterThan(number) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberGreaterThan(number: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_GREATER_THAN;
+    this._values.push(number);
+    return this;
   }
 
   /**
@@ -148,8 +173,10 @@ export class DataValidationBuilder {
    *
    * @param number
    */
-  public requireNumberGreaterThanOrEqualTo(number) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberGreaterThanOrEqualTo(number: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_GREATER_THAN_OR_EQUAL_TO;
+    this._values.push(number);
+    return this;
   }
 
   /**
@@ -157,8 +184,10 @@ export class DataValidationBuilder {
    *
    * @param number
    */
-  public requireNumberLessThan(number) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberLessThan(number: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_LESS_THAN;
+    this._values.push(number);
+    return this;
   }
 
   /**
@@ -166,8 +195,10 @@ export class DataValidationBuilder {
    *
    * @param number
    */
-  public requireNumberLessThanOrEqualTo(number) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberLessThanOrEqualTo(number: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_LESS_THAN_OR_EQUAL_TO;
+    this._values.push(number);
+    return this;
   }
 
   /**
@@ -176,8 +207,11 @@ export class DataValidationBuilder {
    * @param start
    * @param end
    */
-  public requireNumberNotBetween(start, end) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberNotBetween(start: number, end: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_NOT_BETWEEN;
+    this._values.push(start);
+    this._values.push(end);
+    return this;
   }
 
   /**
@@ -185,8 +219,10 @@ export class DataValidationBuilder {
    *
    * @param number
    */
-  public requireNumberNotEqualTo(number) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireNumberNotEqualTo(number: number) : DataValidationBuilder {
+    this._type = DataValidationCriteria.NUMBER_NOT_EQUAL_TO;
+    this._values.push(number);
+    return this;
   }
 
   /**
@@ -194,8 +230,10 @@ export class DataValidationBuilder {
    *
    * @param text
    */
-  public requireTextContains(text) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireTextContains(text: string) : DataValidationBuilder {
+    this._type = DataValidationCriteria.TEXT_CONTAINS;
+    this._values.push(text);
+    return this;
   }
 
   /**
@@ -203,30 +241,36 @@ export class DataValidationBuilder {
    *
    * @param text
    */
-  public requireTextDoesNotContain(text) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireTextDoesNotContain(text: string) : DataValidationBuilder {
+    this._type = DataValidationCriteria.TEXT_DOES_NOT_CONTAIN;
+    this._values.push(text);
+    return this;
   }
 
   /**
    * Sets the data-validation rule to require that the input is equal to the given value.
    * @param text
    */
-  public requireTextEqualTo(text) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireTextEqualTo(text: string) : DataValidationBuilder {
+    this._type = DataValidationCriteria.TEXT_EQUAL_TO;
+    this._values.push(text);
+    return this;
   }
 
   /**
    * Sets the data-validation rule to require that the input is in the form of an email address.
    */
   public requireTextIsEmail() : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+    this._type = DataValidationCriteria.TEXT_IS_VALID_EMAIL;
+    return this;
   }
 
   /**
    * Sets the data-validation rule to require that the input is in the form of a URL.
    */
   public requireTextIsUrl() : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+    this._type = DataValidationCriteria.TEXT_IS_VALID_URL;
+    return this;
   }
 
   /**
@@ -236,8 +280,10 @@ export class DataValidationBuilder {
    * @param values
    * @param showDropdown
    */
-  public requireValueInList(values, showDropdown?: boolean) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireValueInList(values: string[], showDropdown?: boolean) : DataValidationBuilder {
+    this._type = DataValidationCriteria.VALUE_IN_LIST;
+    this._values.push(values);
+    return this;
   }
 
   /**
@@ -248,8 +294,10 @@ export class DataValidationBuilder {
    * @param range
    * @param showDropdown
    */
-  public requireValueInRange(range, showDropdown?: boolean) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public requireValueInRange(range: Range, showDropdown?: boolean) : DataValidationBuilder {
+    this._type = DataValidationCriteria.VALUE_IN_RANGE;
+    this._values.push(range);
+    return this;
   }
 
   /**
@@ -258,8 +306,9 @@ export class DataValidationBuilder {
    *
    * @param allowInvalidData
    */
-  public setAllowInvalid(allowInvalidData) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public setAllowInvalid(allowInvalidData: boolean) : DataValidationBuilder {
+    this._allowInvalid = allowInvalidData;
+    return this;
   }
 
   /**
@@ -267,8 +316,9 @@ export class DataValidationBuilder {
    *
    * @param helpText
    */
-  public setHelpText(helpText) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public setHelpText(helpText: string) : DataValidationBuilder {
+    this._helpText = helpText;
+    return this;
   }
 
   /**
@@ -277,7 +327,9 @@ export class DataValidationBuilder {
    * @param criteria
    * @param args
    */
-  public withCriteria(criteria, args) : DataValidationBuilder {
-    throw new Error(Errors.NOT_IMPLEMENTED_YET);
+  public withCriteria(criteria: DataValidationCriteria, args: Object[]) : DataValidationBuilder {
+    this._type = criteria;
+    this._values = args;
+    return this;
   }
 }

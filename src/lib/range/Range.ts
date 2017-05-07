@@ -4,10 +4,12 @@ import {Errors} from '../Error'
 import Fields from '../Fields'
 import { decode } from '../decoder/index'
 import {
-  isTwoDimArray, isTwoDimArrayCorrectDimensions, isTwoDimArrayOfString, isTwoDimArrayOfNumber,
+  isTwoDimArray, isTwoDimArrayCorrectDimensions, isTwoDimArrayOfString, isTwoDimArrayOfNumber,isTwoDimArrayOfDataValidation,
   isNullUndefined
 } from '../utils/mix'
 import { Sheet } from '../sheet/Sheet'
+import { DataValidation } from '../validation/DataValidation'
+import { DataValidationCriteria, validators } from '../validation/DataValidationCriteria'
 
 // Interfaces
 
@@ -623,8 +625,32 @@ export class Range {
    *
    * @param colors
    */
-  public setBackgrounds(colors: Array<string>[]): void {
+  public setBackgrounds(colors: string[][]): void {
     this.applyStringPropertyValues(Fields.BACKGROUND, colors);
+  }
+
+  /**
+   * Sets one data-validation rule for all cells in the range.
+   *
+   * @param rule
+   * @returns {Range}
+   */
+  public setDataValidation(rule: DataValidation) : Range {
+    this.applyProperty(Fields.DATA_VALIDATION, rule);
+
+    return this;
+  }
+
+  /**
+   * Sets the data-validation rules for all cells in the range.
+   *
+   * @param rules
+   * @returns {Range}
+   */
+  public setDataValidations(rules	: DataValidation[][]) : Range {
+    this.applyDataValidationPropertyValues(Fields.DATA_VALIDATION, rules);
+
+    return this;
   }
 
   /**
@@ -642,7 +668,7 @@ export class Range {
    *
    * @param colors
    */
-  public setFontColors(colors: Array<string>[]): void {
+  public setFontColors(colors: string[][]): void {
     this.applyStringPropertyValues(Fields.FONT_COLOR, colors);
   }
 
@@ -661,7 +687,7 @@ export class Range {
    *
    * @param fontFamilies
    */
-  public setFontFamilies(fontFamilies: Array<string>[]): void {
+  public setFontFamilies(fontFamilies: string[][]): void {
     this.applyStringPropertyValues(Fields.FONT_FAMILY, fontFamilies);
   }
 
@@ -679,7 +705,7 @@ export class Range {
    *
    * @param fontLines
    */
-  public setFontLines(fontLines: Array<string>[]): void {
+  public setFontLines(fontLines: string[][]): void {
     this.applyStringPropertyValues(Fields.FONT_LINE, fontLines);
   }
 
@@ -716,7 +742,7 @@ export class Range {
    *
    * @param fontStyles
    */
-  public setFontStyles(fontStyles: Array<string>[]): void {
+  public setFontStyles(fontStyles: string[][]): void {
     this.applyStringPropertyValues(Fields.FONT_STYLE, fontStyles);
   }
 
@@ -735,7 +761,7 @@ export class Range {
    *
    * @param fontWeights
    */
-  public setFontWeights(fontWeights: Array<string>[]): void {
+  public setFontWeights(fontWeights: string[][]): void {
     this.applyStringPropertyValues(Fields.FONT_WEIGHT, fontWeights);
   }
 
@@ -762,7 +788,7 @@ export class Range {
    *
    * @param formulas
    */
-  public setFormulas(formulas: Array<string>[]): void {
+  public setFormulas(formulas: string[][]): void {
     this.applyStringPropertyValues(Fields.FORMULA, formulas);
   }
 
@@ -771,7 +797,7 @@ export class Range {
    *
    * @param formulas
    */
-  public setFormulasR1C1(formulas: Array<string>[]): void {
+  public setFormulasR1C1(formulas: string[][]): void {
     this.setFormulas(formulas);
   }
 
@@ -789,7 +815,7 @@ export class Range {
    *
    * @param horizontalAlignments
    */
-  public setHorizontalAlignments(horizontalAlignments: Array<string>[]): void {
+  public setHorizontalAlignments(horizontalAlignments: string[][]): void {
     this.applyStringPropertyValues(Fields.HORIZONTAL_ALIGNMENT, horizontalAlignments);
   }
 
@@ -807,7 +833,7 @@ export class Range {
    *
    * @param notes
    */
-  public setNotes(notes: Array<string>[]): void {
+  public setNotes(notes: string[][]): void {
     this.applyStringPropertyValues(Fields.NOTE, notes);
   }
 
@@ -825,7 +851,7 @@ export class Range {
    *
    * @param numberFormats
    */
-  public setNumberFormats(numberFormats: Array<string>[]): void {
+  public setNumberFormats(numberFormats: string[][]): void {
     this.applyStringPropertyValues(Fields.NUMBER_FORMAT, numberFormats);
   }
 
@@ -843,7 +869,7 @@ export class Range {
    *
    * @param horizontalAlignments
    */
-  public setVerticalAlignments(verticalAlignments: Array<string>[]): void {
+  public setVerticalAlignments(verticalAlignments: string[][]): void {
     this.applyStringPropertyValues(Fields.VERTICAL_ALIGNMENT, verticalAlignments);
   }
 
@@ -863,8 +889,18 @@ export class Range {
     this._parent.setLastColumn(this._column + columnCount);
 
     for (var r = 0; r < rowCount; r++)
-      for (var c = 0; c < columnCount; c++)
-        this._gridRange._cells[this._row - 1 + r][this._column - 1 + c].value = value;
+      for (var c = 0; c < columnCount; c++) {
+        // current cell
+        const cell: Cell = this._gridRange._cells[this._row - 1 + r][this._column - 1 + c];
+        // data valication
+        var criteria: DataValidationCriteria = cell.dataValidation.getCriteriaType();
+        if (criteria !== DataValidationCriteria.ANY) {
+          validators[criteria](this._row + r, this._column + c, value, cell.dataValidation);
+        }
+        // assign value
+        cell.value = value;
+      }
+
   }
 
   /**
@@ -883,8 +919,17 @@ export class Range {
     this._parent.setLastColumn(this._column + columnCount);
 
     for (var r = 0; r < rowCount; r++)
-      for (var c = 0; c < columnCount; c++)
-        cells[this._row + r - 1][this._column + c - 1].value = values[r][c];
+      for (var c = 0; c < columnCount; c++) {
+        // current cell
+        const cell: Cell = cells[this._row + r - 1][this._column + c - 1];
+        // data valication
+        var criteria: DataValidationCriteria = cell.dataValidation.getCriteriaType();
+        if (criteria !== DataValidationCriteria.ANY) {
+          validators[criteria](this._row + r, this._column + c, values[r][c], cell.dataValidation);
+        }
+        // assign value
+        cell.value = values[r][c];
+      }
   }
 
   /**
@@ -1210,7 +1255,17 @@ export class Range {
         this._gridRange._cells[this._row + r - 1][this._column + c - 1][propName] = propValue;
   }
 
-  private applyStringPropertyValues(propName: string, propValues : Array<string>[]) : void {
+  private applyDataValidationPropertyValues(propName: string, propValues : DataValidation[][]) : void {
+    check2DimArrayOfDataValidation(propValues, this);
+    const rowCount = this._rowHeight;
+    const columnCount = this._columnWidth;
+
+    for (var r = 0; r < rowCount; r++)
+      for (var c = 0; c < columnCount; c++)
+        this._gridRange._cells[this._row + r - 1][this._column + c - 1][propName] = propValues[r][c];
+  }
+
+  private applyStringPropertyValues(propName: string, propValues : string[][]) : void {
     check2DimArrayOfStrings(propValues, this);
     const rowCount = this._rowHeight;
     const columnCount = this._columnWidth;
@@ -1245,6 +1300,11 @@ const checkValues = (obj: any, range: Range) : void => {
 const check2DimArrayOfStrings = (obj: any, range: Range) : void => {
   isTwoDimArray(obj);
   isTwoDimArrayOfString(obj, range.rowHeight, range.columnWidth);
+};
+
+const check2DimArrayOfDataValidation = (obj: any, range: Range) : void => {
+  isTwoDimArray(obj);
+  isTwoDimArrayOfDataValidation(obj, range.rowHeight, range.columnWidth);
 };
 
 const check2DimArrayOfNumbers = (obj: any, range: Range) : void => {
