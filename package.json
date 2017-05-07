@@ -102,7 +102,7 @@
   },
   "ava": {
     "source": [
-      "test/**/*.js",
+      "test/main/*.js",
       "build/**/*.js",
       "!build/**/*.spec.js"
     ]
