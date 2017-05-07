@@ -12,7 +12,7 @@ export class User {
    * Constructor
    *
    */
-  constructor(email: string) {
+  constructor (email: string) {
     this._email = email;
   }
 
@@ -21,7 +21,7 @@ export class User {
    *
    * @returns {string}
    */
-  public getEmail() : string {
+  public getEmail (): string {
     return this._email;
   }
 
