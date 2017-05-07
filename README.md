@@ -1,5 +1,7 @@
 # excol
 
+[![Build Status](https://travis-ci.org/darul75/excol.svg?branch=master)](https://travis-ci.org/darul75/excol)
+
 Library to mock excel(-like) solutions in Javascript.
 
 ## Why
