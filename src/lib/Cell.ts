@@ -1,8 +1,12 @@
-import {CellValue} from "excol";
+import { CellValue } from './range/Range';
+import { DataValidation } from './validation/DataValidation';
+import { DataValidationCriteria } from './validation/DataValidationCriteria';
+
 export interface Cell {
     row: number;
     column: number;
     background: string;
+    dataValidation: DataValidation;
     numberFormat: string;
     fontColor: string;
     fontFamily: string;
@@ -28,6 +32,7 @@ export const NewCell = (row: number, column: number, value: any) : Cell => {
   return {
       row: row, column: column,
       background: DefaultEmptyString,
+      dataValidation: new DataValidation(true, '', DataValidationCriteria.ANY, []),
       fontColor: DefaultEmptyString, fontFamily: DefaultEmptyString, fontStyle: DefaultFontStyle, fontLine: DefaultFontLine, fontSize: DefaultFontSize, fontWeight: DefaultFontWeight,
       formula: DefaultEmptyString,
       horizontalAlignment: 'left',

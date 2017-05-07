@@ -1,6 +1,7 @@
 export default class Fields
 {
     public static BACKGROUND = 'background';
+    public static DATA_VALIDATION = 'dataValidation';
 
     public static FONT_COLOR = 'fontColor';
     public static FONT_FAMILY = 'fontFamily';
