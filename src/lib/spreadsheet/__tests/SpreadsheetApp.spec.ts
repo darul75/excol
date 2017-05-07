@@ -1,12 +1,17 @@
 import { test } from 'ava';
-import { Range, Sheet, Spreadsheet, SpreadsheetApp } from 'excol';
+import { Range, Sheet, Spreadsheet, SpreadsheetApp, SpreadsheetAppConfig } from 'excol';
 
 const name = 'newSpreadsheet';
 const name1 = 'newSpreadsheet1';
 
+const cfg: SpreadsheetAppConfig = {
+  numRows: 4,
+  numColumns: 4
+};
+
 test('should handle create new spreadsheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp({});
+  const spreadsheetApp = new SpreadsheetApp(cfg);
 
   const spreadsheet = spreadsheetApp.create(name);
   const sheets = spreadsheet.getSheets();
@@ -18,7 +23,7 @@ test('should handle create new spreadsheet', t => {
 
 test('should handle get active spreadsheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp({});
+  const spreadsheetApp = new SpreadsheetApp(cfg);
 
   const spreadsheet = spreadsheetApp.create(name);
 
@@ -29,7 +34,7 @@ test('should handle get active spreadsheet', t => {
 
 test('should handle get active range', t => {
 
-  const spreadsheetApp = new SpreadsheetApp({});
+  const spreadsheetApp = new SpreadsheetApp(cfg);
 
   const spreadsheet = spreadsheetApp.create(name);
 
@@ -51,7 +56,7 @@ test('should handle get active range', t => {
 
 test('should handle get active sheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp({});
+  const spreadsheetApp = new SpreadsheetApp(cfg);
 
   const spreadsheet = spreadsheetApp.create(name);
 
@@ -69,7 +74,7 @@ test('should handle get active sheet', t => {
 
 test('should handle get active spreadsheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp({});
+  const spreadsheetApp = new SpreadsheetApp(cfg);
 
   const spreadsheet = spreadsheetApp.create(name);
   spreadsheetApp.create(name1);

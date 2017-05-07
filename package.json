@@ -51,7 +51,7 @@
     "release": "Clean, build, test, publish docs, and prepare release (a one-step publish process)"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "devDependencies": {
     "chai": "3.3.0",
