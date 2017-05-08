@@ -1,5 +1,5 @@
 // Import
-import  { Cell, NewCell, clearFormat, clearContent } from '../cell/Cell'
+import  { Cell, DefaultEmptyString, NewCell, clearFormat, clearContent } from '../cell/Cell'
 import {Errors} from '../utils/Error'
 import Fields from '../cell/Fields'
 import { decode } from '../decoder/index'
@@ -194,8 +194,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const bg = this._gridRange._cells[this._row + r - 1][this._column + c - 1].background;
-        const clone = bg == null || "object" != typeof bg ? bg : Object.assign({}, bg);
-        bgs[r][c] = clone;
+        bgs[r][c] = bg;
       }
 
     return bgs;
@@ -591,8 +590,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const format = this._gridRange._cells[this._row + r - 1][this._column + c - 1].numberFormat;
-        const clone = format == null || "object" != typeof format ? format : Object.assign({}, format);
-        formats[r][c] = clone;
+        formats[r][c] = format;
       }
 
     return formats;
@@ -614,6 +612,39 @@ export class Range {
    */
   public getRowIndex() : number {
     return this._row;
+  }
+
+  /**
+   * Returns the vertical alignment (top/middle/bottom) of the cell in the top-left corner of the range.
+   */
+  public getVerticalAlignment() : string {
+    return this._gridRange._cells[this._row - 1][this._column - 1].verticalAlignment;
+  }
+
+  /**
+   * Returns the vertical alignments of the cells in the range.
+   *
+   * @returns alignments
+   */
+  public getVerticalAlignments() : string[][] {
+    const values = createArray(this._rowHeight, this._columnWidth);
+
+    for (var r = 0; r < this._rowHeight; r++)
+      for (var c = 0; c < this._columnWidth; c++) {
+        const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].verticalAlignment;
+        values[r][c] = value;
+      }
+
+    return values;
+  }
+
+  /**
+   * Returns the width of the range in columns.
+   *
+   * @returns the number of columns in the range
+   */
+  public getWidth() : number {
+    return this.columnWidth;
   }
 
   /**
@@ -1008,7 +1039,7 @@ export class Range {
       cells.splice(afterPosition, 0, row);
     }
 
-    this._parent.setLastRow(lastRow + 1);
+    this._parent.setLastRow(lastRow + toAddNum);
   }
 
   /**
@@ -1033,7 +1064,7 @@ export class Range {
       cells.splice(afterPosition-1, 0, row);
     }
 
-    this._parent.setLastRow(lastRow + 1);
+    this._parent.setLastRow(lastRow + toAddNum);
   }
 
   public get values() : any[][]
@@ -1110,7 +1141,7 @@ export class Range {
   public mergeAcross(vertically?: boolean) : void {
 
     if (this._rowHeight == 1 && this._columnWidth == 1) {
-      throw new Error("can not merge single cell dude !");
+      throw new Error(Errors.INCORRECT_MERGE_SINGLE_CELL);
     }
 
     const mergeIndexesToBeRemoved = new Array<number>();
@@ -1180,16 +1211,19 @@ export class Range {
     this._column += columnOffset;
   }
 
+  /**
+   * Cut and paste (both format and values) from this range to the target range.
+   *
+   * @param target
+   */
   public moveTo(target: Range) : void {
     if (this.getMergedRanges().length > 0) {
       throw new Error(Errors.INCORRECT_MOVE_TO);
     }
 
+    // Source range attributes
     const sourceValues: Object[][] = this.values;
-
     const sourceFormats: string[][] = this.getNumberFormats();
-
-    // TODO: all fields...
 
     for (var r = 0; r < this._rowHeight; r++) {
         const originRow: number = this._row + r - 1;
@@ -1198,11 +1232,14 @@ export class Range {
           const originCol: number = this._column + c - 1;
           const targetCol: number = target._column + c - 1;
           // assign target
-          this._gridRange._cells[targetRow][targetCol].numberFormat = sourceFormats[r][c];
-          this._gridRange._cells[targetRow][targetCol].value = sourceValues[r][c];
+          const targetCell: Cell = this._gridRange._cells[targetRow][targetCol];
+          targetCell.numberFormat = sourceFormats[r][c];
+          targetCell.value = sourceValues[r][c];
+
           // clean source
           this._gridRange._cells[originRow][originCol].value = null;
-          this._gridRange._cells[originRow][originCol].numberFormat = '';
+          this._gridRange._cells[originRow][originCol].numberFormat = DefaultEmptyString;
+
         }
     }
   }

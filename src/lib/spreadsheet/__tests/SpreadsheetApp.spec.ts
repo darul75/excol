@@ -1,5 +1,8 @@
 import { test } from 'ava';
-import { Range, Sheet, Spreadsheet, SpreadsheetApp, SpreadsheetAppConfig } from 'excol';
+import {
+  Range, Sheet, Spreadsheet, SpreadsheetApp, SpreadsheetAppConfig, DataValidationBuilder,
+  DataValidation, DataValidationCriteria
+} from 'excol';
 
 const name = 'newSpreadsheet';
 const name1 = 'newSpreadsheet1';
@@ -89,7 +92,62 @@ test('should handle get active spreadsheet', t => {
 
 });
 
+test('should handle flush', t => {
 
-test.todo('flush');
-test.todo('newDataValidation');
-test.todo('getUi');
+  const spreadsheetApp = new SpreadsheetApp(cfg);
+
+  spreadsheetApp.flush();
+
+  t.true(1 === 1);
+
+});
+
+test('should handle newDataValidation', t => {
+
+  const spreadsheetApp = new SpreadsheetApp(cfg);
+
+  const builder: DataValidationBuilder = spreadsheetApp.newDataValidation();
+
+  const validation: DataValidation = builder.requireDate().build();
+
+  t.is(validation.getCriteriaType(), DataValidationCriteria.DATE_IS_VALID_DATE);
+
+});
+
+test('should handle setActiveSheet', t => {
+
+  const spreadsheetApp = new SpreadsheetApp(cfg);
+
+  const activeSheet = spreadsheetApp.getActiveSheet();
+
+  spreadsheetApp.getActiveSpreadsheet().insertSheet();
+  spreadsheetApp.getActiveSpreadsheet().insertSheet();
+
+  spreadsheetApp.setActiveSheet(activeSheet);
+
+  t.is(activeSheet.getName(), 'Sheet1');
+
+});
+
+test('should handle setActiveRange', t => {
+
+  const spreadsheetApp = new SpreadsheetApp(cfg);
+
+  const activeSheet = spreadsheetApp.getActiveSheet();
+
+  spreadsheetApp.setActiveRange(activeSheet.getRange({A1: 'A1:B3'}));
+
+  const A1 = spreadsheetApp.getActiveRange().getA1Notation();
+
+  t.is(A1, 'A1:B3');
+
+});
+
+test('should handle getUi', t => {
+
+  const spreadsheetApp = new SpreadsheetApp(cfg);
+  spreadsheetApp.getUi();
+
+  t.is(2,2);
+
+});

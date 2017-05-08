@@ -228,10 +228,7 @@ export class Spreadsheet {
    * @returns {null}
    */
   public getActiveCell() : Range {
-    //
-    // TODO, how?
     throw new Error(Errors.NOT_IMPLEMENTED_YET);
-    //return null;
   }
 
   /**

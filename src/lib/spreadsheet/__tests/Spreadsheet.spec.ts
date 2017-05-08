@@ -1,5 +1,5 @@
 import { test } from 'ava';
-import { Range, Sheet, Spreadsheet, SpreadsheetConfig } from 'excol';
+import {Range, Sheet, Spreadsheet, SpreadsheetConfig, Errors} from 'excol';
 import { User } from 'excol';
 
 const email: string = 'test@com.net';
@@ -206,6 +206,11 @@ test('should handle getSheetByName', t => {
     t.true(sheet.getName() === sheetName);
   else
     t.fail();
+
+  const sheet2 = spreadsheet.getSheetByName('NONEXISTING');
+
+  t.is(sheet2, null);
+
 });
 
 test('should handle insertColumnAfter', t => {
@@ -320,6 +325,29 @@ test('should handle insertRowAfter', t => {
   t.true(spreadsheet.getLastRow() === 6);
 });
 
+test('should handle insertRowsAfter', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertRowsAfter(2, 2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 5, 4);
+
+  t.true(values[0][0] !== null);
+  t.true(values[2][0] === null);
+  t.true(values[3][0] === null);
+  t.true(spreadsheet.getLastRow() === 7);
+});
+
 test('should handle insertRowBefore', t => {
 
   const spreadsheet = new Spreadsheet(cfg2);
@@ -342,8 +370,28 @@ test('should handle insertRowBefore', t => {
   t.true(spreadsheet.getLastRow() === 6);
 });
 
-test.todo('should handle insertRowsAfter');
-test.todo('should handle insertRowsBefore');
+test('should handle insertRowsBefore', t => {
+
+  const spreadsheet = new Spreadsheet(cfg2);
+
+  spreadsheet.getRange('A1:D4').setValues([
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4],
+    [1,2,3,4]
+  ]);
+
+  t.true(spreadsheet.getLastColumn() === 5);
+
+  spreadsheet.insertRowsBefore(2, 2);
+
+  const values = spreadsheet.getSheetValues(1, 1, 5, 4);
+
+  t.true(values[0][0] !== null);
+  t.true(values[1][0] === null);
+  t.true(values[2][0] === null);
+  t.true(spreadsheet.getLastRow() === 7);
+});
 
 test('should get one sheet created on initialization', t => {
 
@@ -372,6 +420,20 @@ test('should handle getId ', t => {
   const spreadsheet = new Spreadsheet(cfg);
 
   t.true(typeof spreadsheet.getId() === 'number');
+
+});
+
+test('should throw error on getActiveCell', t => {
+
+  const spreadsheet = new Spreadsheet(cfg);
+
+  const expected = Errors.NOT_IMPLEMENTED_YET;
+
+  const actual = t.throws(() => {
+    spreadsheet.getActiveCell();
+  }, Error);
+
+  t.is(actual.message, expected);
 
 });
 

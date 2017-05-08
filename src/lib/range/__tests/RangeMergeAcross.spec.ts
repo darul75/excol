@@ -11,6 +11,22 @@ const cfg: SheetConfig = {
   numColumns: DIMENSION
 };
 
+test('should throw error on single cell', t => {
+
+  const grid = new Sheet(cfg);
+  cfg.cellValue = 0;
+
+  const range1 = grid.getRange({A1: 'B2'});
+
+  const expected = Errors.INCORRECT_MERGE_SINGLE_CELL;
+
+  const actual = t.throws(() => {
+    range1.mergeAcross();
+  }, Error);
+
+  t.is(actual.message, expected);
+
+});
 
 test('should merge B2:C2 width D2:E2', t => {
 
@@ -74,6 +90,83 @@ test('can not merge cells with bigger merged range height inside already', t => 
   }, Error);
 
   t.is(error.message, Errors.INCORRECT_MERGE_HORIZONTAL);
+
+});
+
+test('should throw error if not overlaps but not contains', t => {
+
+  const grid = new Sheet(cfg);
+  cfg.cellValue = 0;
+
+  const range1 = grid.getRange({A1: 'B6:C7'});
+  const range2= grid.getRange({A1: 'A6:B8'});
+
+  range1.mergeAcross();
+
+  const expected = Errors.INCORRECT_MERGE;
+
+  const actual = t.throws(() => {
+    range2.mergeAcross();
+  }, Error);
+
+  t.is(actual.message, expected);
+
+});
+
+test('should throw error if merge horizontally across an existing vertically merged section', t => {
+
+  const grid = new Sheet(cfg);
+  cfg.cellValue = 0;
+
+  const range1 = grid.getRange({A1: 'B7:B9'});
+  const range2= grid.getRange({A1: 'A7:B9'});
+
+  range1.mergeVertically();
+
+  const expected = Errors.INCORRECT_MERGE_HORIZONTAL;
+
+  const actual = t.throws(() => {
+    range2.mergeAcross();
+  }, Error);
+
+  t.is(actual.message, expected);
+
+});
+
+test('should throw error if vertically across an existing horizontally merged section', t => {
+
+  const grid = new Sheet(cfg);
+  cfg.cellValue = 0;
+
+  const range1 = grid.getRange({A1: 'A7:C8'});
+  const range2= grid.getRange({A1: 'A6:C9'});
+
+  range1.mergeAcross();
+
+  const expected = Errors.INCORRECT_MERGE_VERTICALLY;
+
+  const actual = t.throws(() => {
+    range2.mergeAcross(true);
+  }, Error);
+
+  t.is(actual.message, expected);
+
+});
+
+test('should remove existing merge when containing it', t => {
+
+  const grid = new Sheet(cfg);
+  cfg.cellValue = 0;
+
+  const range1 = grid.getRange({A1: 'B5:C5'});
+  const range2= grid.getRange({A1: 'B5:C6'});
+
+  range1.mergeAcross();
+
+  t.is(range2.getMergedRanges().length, 1);
+  range2.mergeAcross();
+
+  t.is(range2.getMergedRanges().length, 1);
 
 });
 

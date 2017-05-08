@@ -49,7 +49,7 @@ test('should throw error on bad NUMBER_EQUAL_TO', t => {
     range.setValue(3);
   }, Error);
 
-  t.is(actual.message, expected)
+  t.is(actual.message, expected);
 
 });
 

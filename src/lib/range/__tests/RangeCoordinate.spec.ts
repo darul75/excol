@@ -38,6 +38,19 @@ test('should handle getNumColumns', t => {
 
 });
 
+test('should handle getWidth', t => {
+
+  cfg.cellValue = 0;
+
+  const grid = new Sheet(cfg);
+  const range = grid.getRange({A1: 'B2:D5'});
+
+  const col = range.getWidth();
+
+  t.is(col, 3);
+
+});
+
 test('should handle getRow', t => {
 
   cfg.cellValue = 0;
@@ -46,6 +59,19 @@ test('should handle getRow', t => {
   const range = grid.getRange({A1: 'B2'});
 
   const col = range.getRow();
+
+  t.is(col, 2);
+
+});
+
+test('should handle getRowIndex', t => {
+
+  cfg.cellValue = 0;
+
+  const grid = new Sheet(cfg);
+  const range = grid.getRange({A1: 'B2'});
+
+  const col = range.getRowIndex();
 
   t.is(col, 2);
 
@@ -61,5 +87,18 @@ test('should handle getNumRows', t => {
   const col = range.getNumRows();
 
   t.is(col, 4);
+
+});
+
+test('should handle getHeight', t => {
+
+  cfg.cellValue = 0;
+
+  const grid = new Sheet(cfg);
+  const range = grid.getRange({A1: 'B2:D5'});
+
+  const height = range.getHeight();
+
+  t.is(height, 4);
 
 });
