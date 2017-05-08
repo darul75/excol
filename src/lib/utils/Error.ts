@@ -1,6 +1,7 @@
 export class Errors {
   public static NOT_IMPLEMENTED_YET = 'Not implemented yet';
   public static INCORRECT_GET_RANGE_USAGE = 'Please use getRanges() method instead.';
+  public static INCORRECT_RANGE_CELL = 'Cell reference out of range';
   public static INCORRECT_RANGE_SIGNATURE = 'Please provide row, column at least.';
   public static INCORRECT_A1_NOTATION = 'Please provide correct A1 notation.';
   public static INCORRECT_MERGE = 'You must select all cells in a merged range to merge or unmerge them.';

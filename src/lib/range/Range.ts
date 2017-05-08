@@ -202,10 +202,18 @@ export class Range {
   }
 
   /**
-   * Returns the background color of the top-left cell in the range.
+   * Returns a given cell within a range.
    */
-  public getCell(row: number, column: number) : any {
-    return this._gridRange._cells[row - 1][column - 1];
+  public getCell(row: number, column: number) : Range {
+    const lastRow: number = this._row + this._rowHeight - 1;
+    const lastColumn: number = this._column + this._columnWidth - 1;
+
+    const rowTmp = this._row + row - 1;
+    const colTmp = this._column + column - 1;
+
+    if (rowTmp > lastRow || colTmp > lastColumn) throw new Error(Errors.INCORRECT_RANGE_CELL);
+
+    return this._parent.getRange({row: rowTmp, column: colTmp, numRows: 1, numColumns: 1});
   }
 
   /**
@@ -216,21 +224,28 @@ export class Range {
   }
 
   /**
-   * Returns the data-validation rule for the top-left cell in the range. If data validation has not been set on the cell, this method returns null.
-   *
-   * // TODO
+   * Returns the data-validation rule for the top-left cell in the range.
+   * If data validation has not been set on the cell, this method returns null.
    */
-  public getDataValidation() : any {
-    return null;
+  public getDataValidation() : DataValidation {
+    return this._gridRange._cells[this._row - 1][this._column - 1].dataValidation;
   }
 
   /**
-   * Returns the data-validation rule for the top-left cell in the range. If data validation has not been set on the cell, this method returns null.
-   *
-   * // TODO
+   * Returns the data-validation rule for the top-left cell in the range.
+   * If data validation has not been set on the cell, this method returns null.
+   * TODO: return null...
    */
-  public getDataValidations() : any {
-    return null;
+  public getDataValidations() : DataValidation[][] {
+    const values = createArray(this._rowHeight, this._columnWidth);
+
+    for (var r = 0; r < this._rowHeight; r++)
+      for (var c = 0; c < this._columnWidth; c++) {
+        const validation = this._gridRange._cells[this._row + r - 1][this._column + c - 1].dataValidation;
+        values[r][c] = validation;
+      }
+
+    return values;
   }
 
   /**
@@ -239,13 +254,14 @@ export class Range {
    * @returns display value
    */
   public getDisplayValue() : string {
-    return this._gridRange._cells[this._row - 1][this._column - 1].value;
+    const cell: Cell = this._gridRange._cells[this._row - 1][this._column - 1];
+    return cell.value == null || "object" != typeof cell.value ? ''+ cell.value : cell.value.toString();
   }
 
   /**
-   * Returns the displayed value of the top-left cell in the range. The value will be of type String.
+   * Returns the rectangular grid of values for this range.
    *
-   * @returns display value
+   * @returns a two-dimensional array of values
    */
   public getDisplayValues() : string[][] {
     const values = createArray(this._rowHeight, this._columnWidth);
@@ -253,7 +269,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].value;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
+        const clone = value == null || "object" != typeof value ? ''+ value : value.toString();
         values[r][c] = clone;
       }
 
@@ -278,8 +294,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontColor;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        colors[r][c] = clone;
+        colors[r][c] = value;
       }
 
     return colors;
@@ -296,8 +311,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontFamily;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        families[r][c] = clone;
+        families[r][c] = value;
       }
 
     return families;
@@ -328,8 +342,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontLine;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        lines[r][c] = clone;
+        lines[r][c] = value;
       }
 
     return lines;
@@ -353,8 +366,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontSize;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        sizes[r][c] = clone;
+        sizes[r][c] = value;
       }
 
     return sizes;
@@ -378,8 +390,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontStyle;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        sizes[r][c] = clone;
+        sizes[r][c] = value;
       }
 
     return sizes;
@@ -403,8 +414,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].fontWeight;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        weights[r][c] = clone;
+        weights[r][c] = value;
       }
 
     return weights;
@@ -435,8 +445,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].formula;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        formulas[r][c] = clone;
+        formulas[r][c] = value;
       }
 
     return formulas;
@@ -453,8 +462,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].formula;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        formulas[r][c] = clone;
+        formulas[r][c] = value;
       }
 
     return formulas;
@@ -485,8 +493,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].horizontalAlignment;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        values[r][c] = clone;
+        values[r][c] = value;
       }
 
     return values;
@@ -543,8 +550,7 @@ export class Range {
     for (var r = 0; r < this._rowHeight; r++)
       for (var c = 0; c < this._columnWidth; c++) {
         const value = this._gridRange._cells[this._row + r - 1][this._column + c - 1].note;
-        const clone = value == null || "object" != typeof value ? value : Object.assign({}, value);
-        values[r][c] = clone;
+        values[r][c] = value;
       }
 
     return values;
@@ -1182,6 +1188,8 @@ export class Range {
     const sourceValues: Object[][] = this.values;
 
     const sourceFormats: string[][] = this.getNumberFormats();
+
+    // TODO: all fields...
 
     for (var r = 0; r < this._rowHeight; r++) {
         const originRow: number = this._row + r - 1;

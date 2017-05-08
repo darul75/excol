@@ -11,45 +11,51 @@ const cfg: SheetConfig = {
   numColumns: DIMENSION
 };
 
-/*
- TODO: reactivate
-test('should throw error on bad colors types', t => {
-
-  const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
-
-  const expectedErr = Errors.INCORRECT_SET_VALUES_PARAMETERS(typeof '');
-  const expectedErr2 = Errors.INCORRECT_SET_VALUES_PARAMETERS(typeof 0);
-
-
-
-  /* tslint:disable */
-  /*
-   expect(function(){range.setBackgrounds('toto')}).to.throw(expectedErr);
-   expect(function(){range.setBackgrounds(0)}).to.throw(expectedErr2);
-   */
-  /* tslint:enable */
-
-  /*
-});
-*/
-
-test('should set array of colors for range A2:B3', t => {
+test('should set array of backgrounds for range A2:B3', t => {
 
   const sheet = new Sheet(cfg);
   const range = sheet.getRange({A1: 'A2:B3'});
 
-  range.setValues([
+  range.setBackgrounds([
     ['A2', 'B2'],
     ['A3', 'B3'],
   ]);
 
-  const rangeValue = range.values;
+  const bgs = range.getBackgrounds();
+  const bg = range.getBackground();
 
   const expected = [
     ['A2', 'B2'],
     ['A3', 'B3']
   ];
 
-  t.deepEqual(rangeValue, expected);
+  t.deepEqual(bgs, expected);
+  t.is(bg, 'A2');
 });
+
+/*
+ test.only('should throw error on bad colors types', t => {
+
+ const grid = new Sheet(cfg);
+ const range = grid.getRange({A1: 'A2:B3'});
+
+ const expectedErr = Errors.INCORRECT_SET_VALUES_PARAMETERS(typeof '');
+ const expectedErr2 = Errors.INCORRECT_SET_VALUES_PARAMETERS(typeof 0);
+
+
+ ///* tslint:disable */
+
+/*
+ const actual = t.throws(() => {
+ range.setBackgrounds('toto');
+ }, Error);
+
+ t.is(actual.message, expectedErr);
+
+
+ //expect(function(){range.setBackgrounds(0)}).to.throw(expectedErr2);
+
+ /* tslint:enable */
+
+
+//});
