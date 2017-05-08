@@ -35,7 +35,7 @@ test('should set array of values for range A2:B3', t => {
 
   range.setValues([
     ['A2', 'B2'],
-    ['A3', 'B3'],
+    ['A3', 'B3']
   ]);
 
   const rangeValue = range.values;
@@ -46,5 +46,44 @@ test('should set array of values for range A2:B3', t => {
   ];
 
   t.deepEqual(rangeValue, expected);
+});
+
+test('should get display values for range A2:B3', t => {
+
+  const grid = new Sheet(cfg);
+  const range = grid.getRange({A1: 'A2:B3'});
+
+  range.setValues([
+    ['A2', 'B2'],
+    ['A3', 'B3']
+  ]);
+
+  const displayVal = range.getDisplayValue();
+  const displayVals = range.getDisplayValues();
+
+  const expected = [
+    ['A2', 'B2'],
+    ['A3', 'B3']
+  ];
+
+  t.is(displayVal, 'A2');
+  t.deepEqual(displayVals, expected);
+
+  const expected2 = [
+    ['1', '2'],
+    ['3', '4']
+  ];
+
+  range.setValues([
+    [1, 2],
+    [3, 4]
+  ]);
+
+  const displayVal2 = range.getDisplayValue();
+  const displayVals2 = range.getDisplayValues();
+
+  t.deepEqual(displayVals2, expected2);
+  t.is(displayVal2, '1');
+
 });
 
