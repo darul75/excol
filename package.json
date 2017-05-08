@@ -20,7 +20,7 @@
     "build:resolve-sourcemaps": "sorcery -i build/browser/index.js && sorcery -i build/browser/index.cjs.js",
     "build:tests": "trash test && node config/exports/build-tests.js",
     "lint": "tslint src/**/*.ts",
-    "unit": "yarn build && yarn build:tests && nyc ava",
+    "unit": "yarn build && yarn build:tests && nyc ava --serial",
     "check-coverage": "nyc check-coverage --lines 50 --functions 50 --branches 50",
     "test": "yarn unit && yarn check-coverage",
     "test-lint": "yarn lint && yarn unit && yarn check-coverage",
@@ -103,7 +103,7 @@
   },
   "ava": {
     "source": [
-      "test/main/*.js",
+      "test/**/*.js",
       "build/**/*.js",
       "!build/**/*.spec.js"
     ]
