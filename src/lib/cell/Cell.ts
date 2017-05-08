@@ -1,6 +1,6 @@
-import { CellValue } from './range/Range';
-import { DataValidation } from './validation/DataValidation';
-import { DataValidationCriteria } from './validation/DataValidationCriteria';
+import { CellValue } from '../range/Range';
+import { DataValidation } from '../validation/DataValidation';
+import { DataValidationCriteria } from '../validation/DataValidationCriteria';
 
 export interface Cell {
   row: number

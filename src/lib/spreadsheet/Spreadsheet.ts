@@ -1,10 +1,10 @@
 // Imports
 import { Range, CellValue } from '../range/Range'
-import { Errors } from '../Error'
-import { Sheet } from "../sheet/Sheet";
-import { SheetConfig } from "../sheet/Sheet";
-import NamedRange from "../range/NamedRange";
-import { User } from "../User";
+import { Errors } from '../utils/Error'
+import { Sheet } from '../sheet/Sheet';
+import { SheetConfig } from '../sheet/Sheet';
+import { NamedRange } from '../range/NamedRange';
+import { User } from '../user/User';
 
 export interface SpreadsheetConfig {
     name: string,
@@ -145,10 +145,12 @@ export class Spreadsheet {
   /**
    * Add named ranges in this spreadsheet.
    */
-  public addNamedRanges(name: string, range: Range) : void {
+  public addNamedRanges(name: string, range: Range) : NamedRange {
     const namedRange = new NamedRange(this, name, range);
 
     this._namedRanges.push(namedRange);
+
+    return namedRange;
   }
 
   /**

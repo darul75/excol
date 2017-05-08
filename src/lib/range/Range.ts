@@ -1,7 +1,7 @@
 // Import
-import  { Cell, NewCell, clearFormat, clearContent } from '../Cell'
-import {Errors} from '../Error'
-import Fields from '../Fields'
+import  { Cell, NewCell, clearFormat, clearContent } from '../cell/Cell'
+import {Errors} from '../utils/Error'
+import Fields from '../cell/Fields'
 import { decode } from '../decoder/index'
 import {
   isTwoDimArray, isTwoDimArrayCorrectDimensions, isTwoDimArrayOfString, isTwoDimArrayOfNumber,isTwoDimArrayOfDataValidation,

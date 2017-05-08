@@ -2,7 +2,7 @@
 import { Range, CellValue } from '../range/Range'
 import { Sheet } from "../sheet/Sheet"
 import { Spreadsheet } from './Spreadsheet'
-import { Ui } from '../UI'
+import { Ui } from '../ui/UI'
 import { DataValidationBuilder } from '../validation/DataValidationBuilder'
 import {DataValidationCriteria} from '../validation/DataValidationCriteria'
 

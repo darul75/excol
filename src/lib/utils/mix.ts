@@ -1,4 +1,4 @@
-import { Errors } from '../Error'
+import { Errors } from './Error'
 
 export const isTwoDimArray = (o : any) : void => {
     if (!(o.constructor === Array && o[0] && o[0].constructor === Array)) {
