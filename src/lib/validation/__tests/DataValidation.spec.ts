@@ -11,6 +11,28 @@ const cfg: SheetConfig = {
   numColumns: DIMENSION
 };
 
+
+test('should handle getAllowInvalid', t => {
+
+  const validation = new DataValidationBuilder().requireNumberEqualTo(2).setAllowInvalid(false).build();
+
+  t.is(validation.getAllowInvalid(), false);
+
+});
+
+test('should handle getHelpText', t => {
+
+  const validation = new DataValidationBuilder()
+    .requireNumberEqualTo(2)
+    .setAllowInvalid(false)
+    .setHelpText('help')
+      .build();
+
+  t.is(validation.getHelpText(), 'help');
+
+});
+
+
 test('should throw error on bad NUMBER_EQUAL_TO', t => {
 
   const grid = new Sheet(cfg);

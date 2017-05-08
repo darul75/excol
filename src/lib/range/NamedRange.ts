@@ -7,7 +7,7 @@ import { Spreadsheet } from '../spreadsheet/Spreadsheet';
 /**
  * Spreadsheet class.
  */
-export default class NamedRange {
+export class NamedRange {
 
   private _name: string;
   private _range: Range;

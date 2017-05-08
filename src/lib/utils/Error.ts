@@ -9,8 +9,8 @@ export class Errors {
   public static INCORRECT_MERGE_VERTICALLY = "You can't merge vertically across an existing horizontally merged section.";
   public static INCORRECT_COORDINATES_OR_DIMENSIONS = 'The coordinates or dimensions of the range are invalid.';
   public static INCORRECT_MOVE_TO = `You can't perform a cut/paste from a range that partially intersects a merge. Consider unmerging or selecting a larger range that includes the entire merge.`;
-  public static INCORRECT_RANGE_HEIGHT = (first, second) => `Incorrect range height, was ${first}  but should be ${second}.`;
-  public static INCORRECT_RANGE_WIDTH = (first, second) => `Incorrect range width, was ${first}  but should be ${second}.`;
+  public static INCORRECT_RANGE_HEIGHT = (first, second) => `Incorrect range height, was ${first} but should be ${second}.`;
+  public static INCORRECT_RANGE_WIDTH = (first, second) => `Incorrect range width, was ${first} but should be ${second}.`;
   public static INCORRECT_SET_VALUES_PARAMETERS = (type) => `Cannot find method setValues(${type}).`;
   public static INCORRECT_RANGE_DATA_VALIDATION = (a1Notation) => `The data you entered in cell(s) ${a1Notation} violates the data validation rules set on this cell.`;
 }

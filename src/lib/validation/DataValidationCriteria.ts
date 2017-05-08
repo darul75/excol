@@ -1,6 +1,5 @@
-import { Errors } from '../Error'
+import { Errors } from '../utils/Error'
 import { decode } from '../decoder/index'
-import { Cell } from '../Cell';
 import { DataValidation } from '../validation/DataValidation';
 
 export enum DataValidationCriteria {

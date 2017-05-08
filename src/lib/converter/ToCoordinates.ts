@@ -10,12 +10,12 @@ import { A1Type, CoordinatesConverterFunc } from './Types'
  Multiple A1                A1,B5          [ [ '1,1' ], [ '5,2' ] ]
  A1 through B5	            A1:B5	         [ [ '1,1', '5,2' ] ]
  A multiple-area selection	A1:B5,A1:B5	   [ [ '1,1', '5,2' ], [ '1,1', '5,2' ] ]
- Column A	                  A:A	           [ [ 'A', 'A' ] ]
+ Column A	                  A:A	           [ [ '-1', '1' ] ]
  Row 1	                    1:1	           [ [ '1', '1' ] ]
  Rows 1 through 5	          1:5	           [ [ '1', '5' ] ]
  Columns A through C	      A:C	           [ [ 'A', 'C' ] ]
  Rows 1, 3, and 8	          1:1,3:3,8:8	   [ [ '1', '1' ], [ '3', '3' ], [ '8', '8' ] ]
- Columns A, C, and F	      A:A,C:C,F:F	   [ [ 'A', 'A' ], [ 'C', 'C' ], [ 'F', 'F' ] ]
+ Columns A, C, and F	      A:A,C:C,F:F	   [ [ '-1', '1' ], [ '-1', '3' ], [ '-1', '6' ] ]
  Multiple mixed             A1,1:1,A1:B5,C:F   [ [ '1,1' ], [ '1', '1' ], [ '1,1', '5,2' ], [ 'F', 'F' ] ]
  */
 
@@ -55,8 +55,9 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
         let firstCoordinate: Array<number | number[]> = [];
         let secondCoordinate: Array<number | number[]> = [];
 
+        // check whole row or column [ 'A' ] [ '1' ]
         if (startRangeRowColumns.length == 1) {
-          // check whole row or column
+
           const item = startRangeRowColumns[0];
           if (isNan(item)) {
             firstCoordinate.push(-1, toInt(item));
@@ -65,11 +66,9 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
             firstCoordinate.push(toInt(item), -1);
           }
         }
+        // normal case [ '1', '2' ] row,column
         else {
-          firstCoordinate = firstElt.split(COMMA).map((item) => {
-            if (isNan(item)) return [-1, toInt(item)];
-            return toInt(item);
-          });
+          firstCoordinate = firstElt.split(COMMA).map((item) => toInt(item));
         }
 
         if (endRangeRowColumns.length == 1) {
@@ -83,10 +82,7 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
           }
         }
         else {
-          secondCoordinate = secondElt.split(COMMA).map((item) => {
-            if (isNan(item)) return [-1, toInt(item)];
-            return toInt(item);
-          });
+          secondCoordinate = secondElt.split(COMMA).map((item) => toInt(item));
         }
 
         return [ firstCoordinate, secondCoordinate ];
@@ -118,8 +114,6 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
       }
 
     }
-
-    return [];
   });
 };
 
