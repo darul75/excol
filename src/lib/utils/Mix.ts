@@ -12,11 +12,11 @@ export const isTwoDimArrayCorrectDimensions = (o : any, rows: number, columns: n
     const numRows = o.length;
     const numColumns = o[0].length;
 
-    if (numRows != rows) {
+    if (numRows !== rows) {
         throw new Error(Errors.INCORRECT_RANGE_HEIGHT(numRows, rows));
     }
 
-    if (numColumns != columns) {
+    if (numColumns !== columns) {
         throw new Error(Errors.INCORRECT_RANGE_WIDTH(numColumns, columns));
     }
 };
@@ -36,6 +36,8 @@ export const isTwoDimArrayOfNumber = (o : any, rows: number, columns: number) : 
 
 export const isTwoDimArrayOfDataValidation = (o : any, rows: number, columns: number) : boolean => {
   isTwoDimArrayCorrectDimensions(o, rows, columns);
+
+  // TO BE FINISHED
 
   return true;
 };

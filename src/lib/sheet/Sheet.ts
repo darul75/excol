@@ -4,7 +4,7 @@ import { Range, CellValue } from '../range/Range'
 import { toCoordinates, validateA1 } from '../converter/ToCoordinates'
 import { Errors } from '../utils/Error'
 import { Spreadsheet } from '../spreadsheet/Spreadsheet'
-import { isNullUndefined } from '../utils/mix'
+import { isNullUndefined } from '../utils/Mix'
 
 // Interfaces
 export interface Dimension {
