@@ -6,7 +6,7 @@ import { decode } from '../decoder/index'
 import {
   isTwoDimArray, isTwoDimArrayCorrectDimensions, isTwoDimArrayOfString, isTwoDimArrayOfNumber,isTwoDimArrayOfDataValidation,
   isNullUndefined
-} from '../utils/mix'
+} from '../utils/Mix'
 import { Sheet } from '../sheet/Sheet'
 import { DataValidation } from '../validation/DataValidation'
 import { DataValidationCriteria, validators } from '../validation/DataValidationCriteria'

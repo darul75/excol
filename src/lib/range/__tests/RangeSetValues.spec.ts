@@ -1,6 +1,5 @@
 import { test } from 'ava';
 import { Sheet, SheetConfig } from 'excol';
-import { Errors } from 'excol';
 
 const DIMENSION = 20;
 
