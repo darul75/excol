@@ -10,6 +10,6 @@ export default class Fields {
   public static FORMULA = 'formula';
   public static NOTE = 'note';
   public static HORIZONTAL_ALIGNMENT = 'horizontalAlignment';
-  public static VERTICAL_ALIGNMENT = 'horizontalAlignment';
+  public static VERTICAL_ALIGNMENT = 'verticalAlignment';
   public static NUMBER_FORMAT = 'numberFormat';
 }

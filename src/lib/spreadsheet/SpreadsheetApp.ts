@@ -54,8 +54,7 @@ export class SpreadsheetApp {
   init({numRows = DIMENSION, numColumns = DIMENSION, cellValue} : { numRows?: number, numColumns?: number, cellValue?: CellValue }): void {
     this._numRows = numRows;
     this._numColumns = numColumns;
-
-    // TODO : insert new sheet
+    this._active = this.create('Untitled spreadsheet', numRows, numColumns);
   }
 
   /**
