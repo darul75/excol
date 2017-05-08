@@ -29,7 +29,7 @@ export const validateA1 = ({ A1 }: A1Type) => A1_VALIDATOR_REGEXP.test(A1);
 
 export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] => {
 
-  if (A1 == null || A1.length == 0) {
+  if (A1 == null || A1.length === 0) {
     throw new Error('A1 notation is empty');
   }
 
@@ -39,12 +39,12 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
     const firstElt = elt[0];
 
     // Single cell
-    if (elt.length == 1) {
+    if (elt.length === 1) {
       return firstElt.split(COMMA).map(toInt);
     }
 
     // Range
-    if (elt.length == 2) {
+    if (elt.length === 2) {
       const secondElt = elt[1];
 
       if (~firstElt.indexOf(COMMA) || ~secondElt.indexOf(COMMA)) {
@@ -56,7 +56,7 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
         let secondCoordinate: Array<number | number[]> = [];
 
         // check whole row or column [ 'A' ] [ '1' ]
-        if (startRangeRowColumns.length == 1) {
+        if (startRangeRowColumns.length === 1) {
 
           const item = startRangeRowColumns[0];
           if (isNan(item)) {
@@ -71,7 +71,7 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
           firstCoordinate = firstElt.split(COMMA).map((item) => toInt(item));
         }
 
-        if (endRangeRowColumns.length == 1) {
+        if (endRangeRowColumns.length === 1) {
           // check whole row or column
           const item = endRangeRowColumns[0];
           if (isNan(item)) {
@@ -88,7 +88,8 @@ export const toCoordinates: CoordinatesConverterFunc = ({ A1 }: A1Type) : any[] 
         return [ firstCoordinate, secondCoordinate ];
       }
       // Row or column
-      else {
+      else
+      {
         const nan = +firstElt;
         if (Number.isNaN(nan)) { // column names
           const colValue = encode(firstElt);
