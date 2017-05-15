@@ -39,7 +39,7 @@ export class SpreadsheetApp {
    * @param {object?} cfg Spreadsheet configuration
    */
   constructor(cfg: SpreadsheetAppConfig) {
-    this.cfg = cfg;
+    this.cfg = cfg || spreadsheetConfig;
 
     this.init(this.cfg);
   }
