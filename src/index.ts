@@ -7,7 +7,10 @@ export * from './lib/range/Range'
 export * from './lib/range/NamedRange'
 
 export * from './lib/cell/Cell'
+
 export * from './lib/utils/Error'
+export * from './lib/utils/Logger'
+
 export * from './lib/user/User'
 export * from './lib/sheet/Sheet'
 export * from './lib/spreadsheet/Spreadsheet'
