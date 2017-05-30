@@ -17,7 +17,7 @@ test('should handle getCell', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B7:C8'});
+  const range = grid.getRange('B7:C8');
 
   range.setValues([
     [1, 2],
@@ -39,7 +39,7 @@ test('should getCell throw out of range', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B7:C8'});
+  const range = grid.getRange('B7:C8');
 
   range.setValues([
     [1, 2],

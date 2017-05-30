@@ -94,7 +94,7 @@ export class Sheet {
    * @returns {Sheet}
    */
   public appendRow(rowContents: Object[]) : Sheet {
-    const range = this.getRange({row: this._lastRow, column: 1, numRows: 1, numColumns: rowContents.length});
+    const range = this.getInternalRange({row: this._lastRow, column: 1, numRows: 1, numColumns: rowContents.length});
 
     range.setValues([rowContents]);
 
@@ -167,7 +167,7 @@ export class Sheet {
       newValues[r] = values[r];
     }
 
-    const allRange: Range = this.getRange({row: 1, column: 1, numRows: this._numRows, numColumns: this._numColumns});
+    const allRange: Range = this.getInternalRange({row: 1, column: 1, numRows: this._numRows, numColumns: this._numColumns});
 
     allRange.setValues(newValues);
 
@@ -204,7 +204,7 @@ export class Sheet {
 
     for(var i = 0; i < toDelNum; i++) values.push(createArray(this._numColumns));
 
-    const allRange: Range = this.getRange({row: 1, column: 1, numRows: this._numRows, numColumns: this._numColumns});
+    const allRange: Range = this.getInternalRange({row: 1, column: 1, numRows: this._numRows, numColumns: this._numColumns});
 
     allRange.setValues(values);
 
@@ -257,6 +257,30 @@ export class Sheet {
     return this._parent;
   }
 
+
+  /**
+   * Returns the range with the top left cell at the given coordinates, and with the given number of rows.
+
+   *
+   * @param rowOfNotation
+   * @param column
+   * @param numRows
+   * @param numColumns
+   * @returns {Range}
+   */
+  public getRange(rowOfNotation: number | string, column?: number, numRows: number = 1, numColumns: number = 1) : Range {
+    if (typeof rowOfNotation === 'number') {
+      return this.getInternalRange({row: rowOfNotation, column, numRows, numColumns});
+    }
+
+    if (typeof rowOfNotation === 'string') {
+      return this.getInternalRange({A1: rowOfNotation});
+    }
+
+    // TODO : throw error
+    throw new Error("TODO");
+  }
+
   /**
    * Get specific range by A1 or matrix.
    *
@@ -268,7 +292,7 @@ export class Sheet {
    *
    * @returns {Range} Range object
    */
-  public getRange({A1, row, column, numRows, numColumns}:
+  public getInternalRange({A1, row, column, numRows, numColumns}:
     RangeType): Range {
 
     let range;
@@ -381,7 +405,7 @@ export class Sheet {
    * @returns {any[][]}
    */
   public getSheetValues(startRow, startColumn, numRows, numColumns) : any[][] {
-    const range: Range = this.getRange({row: startRow, column: startColumn, numRows: numRows, numColumns: numColumns});
+    const range: Range = this.getInternalRange({row: startRow, column: startColumn, numRows: numRows, numColumns: numColumns});
 
     return range.values;
   }

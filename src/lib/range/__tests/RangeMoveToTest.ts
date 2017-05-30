@@ -13,8 +13,8 @@ const cfg: SheetConfig = {
 test('should move range A1:B2 to C1:D2', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A1:B2'});
-  const target = grid.getRange({A1: 'C1:D2'});
+  const range = grid.getRange('A1:B2');
+  const target = grid.getRange('C1:D2');
 
   range.setValues([
     ['A1', 'B1'],
@@ -41,8 +41,8 @@ test('should move range A1:B2 to C1:D2', t => {
 test('should move range values B2:C3 to C1:D2', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2:C3'});
-  const target = grid.getRange({A1: 'C1:D2'});
+  const range = grid.getRange('B2:C3');
+  const target = grid.getRange('C1:D2');
 
   range.setValues([
     ['B2', 'C2'],

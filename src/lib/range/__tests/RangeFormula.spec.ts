@@ -14,7 +14,7 @@ const cfg: SheetConfig = {
 test('should handle formula for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const for1 = '=for1';
   const for2 = '=for2';
 
@@ -52,7 +52,7 @@ test('should handle formula for A2:B3', t => {
 test('should handle formula R1C1 for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const for1 = '=for1';
   const for2 = '=for2';
 
@@ -91,7 +91,7 @@ test('should handle formula R1C1 for A2:B3', t => {
 test('should handle note(s) for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const n1 = 'n1';
   const n2 = 'n2';
 

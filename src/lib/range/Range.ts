@@ -212,7 +212,7 @@ export class Range {
 
     if (rowTmp > lastRow || colTmp > lastColumn) throw new Error(Errors.INCORRECT_RANGE_CELL);
 
-    return this._parent.getRange({row: rowTmp, column: colTmp, numRows: 1, numColumns: 1});
+    return this._parent.getInternalRange({row: rowTmp, column: colTmp, numRows: 1, numColumns: 1});
   }
 
   /**
@@ -612,6 +612,14 @@ export class Range {
    */
   public getRowIndex() : number {
     return this._row;
+  }
+
+  /**
+   * Returns the rectangular grid of values for this range.
+   *
+   */
+  public getValues() : any[][] {
+    return this.values;
   }
 
   /**
@@ -1067,6 +1075,11 @@ export class Range {
     this._parent.setLastRow(lastRow + toAddNum);
   }
 
+  /**
+   * Returns the rectangular grid of values for this range.
+   *
+   * @returns {any[]}
+   */
   public get values() : any[][]
   {
     const values = createArray(this._rowHeight, this._columnWidth);

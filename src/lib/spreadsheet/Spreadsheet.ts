@@ -254,7 +254,7 @@ export class Spreadsheet {
    *
    */
   public getDataRange() : Range {
-    return this._activeSheet.getRange({row:1, column:1, numRows:this.getLastRow() - 1, numColumns:this.getLastColumn() - 1});
+    return this._activeSheet.getRange(1, 1, this.getLastRow() - 1, this.getLastColumn() - 1);
   }
 
   /**
@@ -323,7 +323,7 @@ export class Spreadsheet {
    * @returns {Range}
    */
   public getRange(a1Notation: string) : Range {
-    return this._activeSheet.getRange({A1: a1Notation});
+    return this._activeSheet.getRange(a1Notation);
   }
 
   /**

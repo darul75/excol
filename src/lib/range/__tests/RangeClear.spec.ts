@@ -17,7 +17,7 @@ test('should clear erase all', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A1:B2'});
+  const range = grid.getRange('A1:B2');
 
   range.setBackground('black');
   range.setFontColor('blue');

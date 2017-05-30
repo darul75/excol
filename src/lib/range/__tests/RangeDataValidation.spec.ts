@@ -14,7 +14,7 @@ const cfg: SheetConfig = {
 test('should set array/one of datavalidation for range A2:B3', t => {
 
   const sheet = new Sheet(cfg);
-  const range = sheet.getRange({A1: 'A2:B3'});
+  const range = sheet.getRange('A2:B3');
 
   var validation: DataValidation = new DataValidationBuilder().requireDate().build();
 

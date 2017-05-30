@@ -164,7 +164,7 @@ test('should handle getDataRange', t => {
 
   const sheet: Sheet = spreadsheet.getActiveSheet();
 
-  const range: Range = sheet.getRange({row: 3, column: 2, numRows: 2, numColumns: 2});
+  const range: Range = sheet.getRange(3, 2, 2, 2);
 
   range.setValues([
     [1,2],

@@ -14,7 +14,7 @@ const cfg: SheetConfig = {
 test('should get cells format from getNumberFormats', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const cellFormat = 'myFormat';
 
   range.setNumberFormat(cellFormat);
@@ -41,7 +41,7 @@ test('should get cells format from getNumberFormats', t => {
 test('should get cells format from getNumberFormat', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const cellFormat = 'myFormat';
 
   range.setNumberFormat(cellFormat);

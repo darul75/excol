@@ -14,7 +14,7 @@ const cfg: SheetConfig = {
 test('should handle horizontalAlignment for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const left = 'left';
   const right = 'right';
 
@@ -52,7 +52,7 @@ test('should handle horizontalAlignment for A2:B3', t => {
 test('should handle verticalAlignment for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const left = 'left';
   const right = 'right';
 

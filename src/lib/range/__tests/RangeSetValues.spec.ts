@@ -30,7 +30,7 @@ test('should throw error on bad value types', t => {
 test('should set array of values for range A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
 
   range.setValues([
     ['A2', 'B2'],
@@ -38,6 +38,9 @@ test('should set array of values for range A2:B3', t => {
   ]);
 
   const rangeValue = range.values;
+  const rangeValues = range.getValues();
+
+  t.deepEqual(rangeValue, rangeValues);
 
   const expected = [
     ['A2', 'B2'],
@@ -50,7 +53,7 @@ test('should set array of values for range A2:B3', t => {
 test('should get display values for range A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
 
   range.setValues([
     ['A2', 'B2'],

@@ -16,9 +16,9 @@ test('should merge B2:B3 width C2:C3', t => {
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B2:B3'});
-  const range2 = grid.getRange({A1: 'C2:C3'});
-  const range4 = grid.getRange({A1: 'B2:C3'});
+  const range1 = grid.getRange('B2:B3');
+  const range2 = grid.getRange('C2:C3');
+  const range4 = grid.getRange('B2:C3');
   range4.setValues([
     [0, 1],
     [2, 3]
@@ -39,7 +39,7 @@ test('should merge B2:C5', t => {
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B2:C5'});
+  const range1 = grid.getRange('B2:C5');
 
   range1.setValues([
     [0, 1],
@@ -63,8 +63,8 @@ test('should merge B2:C5', t => {
 test('can not merge cells with bigger merged range height inside already', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B4:C6'});
-  const range2 = grid.getRange({A1: 'B3:C6'});
+  const range1 = grid.getRange('B4:C6');
+  const range2 = grid.getRange('B3:C6');
 
   range1.merge();
 

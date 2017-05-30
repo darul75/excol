@@ -19,7 +19,7 @@ test('should handle custom object', t => {
   };
 
   const grid = new Sheet(cfg);
-  const res = grid.getRange({row: 1, column: 1});
+  const res = grid.getRange(1, 1);
 
   const value = res.values[0][0];
 
@@ -33,7 +33,7 @@ test('should handle number', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const res = grid.getRange({row: 1, column: 1});
+  const res = grid.getRange(1, 1);
 
   const value = res.values[0][0];
 

@@ -17,7 +17,7 @@ test('should handle getColumn', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2:D4'});
+  const range = grid.getRange('B2:D4');
 
   const col = range.getColumn();
 
@@ -30,7 +30,7 @@ test('should handle getNumColumns', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2:D5'});
+  const range = grid.getRange('B2:D5');
 
   const col = range.getNumColumns();
 
@@ -43,7 +43,7 @@ test('should handle getWidth', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2:D5'});
+  const range = grid.getRange('B2:D5');
 
   const col = range.getWidth();
 
@@ -56,7 +56,7 @@ test('should handle getRow', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2'});
+  const range = grid.getRange('B2');
 
   const col = range.getRow();
 
@@ -69,7 +69,7 @@ test('should handle getRowIndex', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2'});
+  const range = grid.getRange('B2');
 
   const col = range.getRowIndex();
 
@@ -82,7 +82,7 @@ test('should handle getNumRows', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2:D5'});
+  const range = grid.getRange('B2:D5');
 
   const col = range.getNumRows();
 
@@ -95,7 +95,7 @@ test('should handle getHeight', t => {
   cfg.cellValue = 0;
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B2:D5'});
+  const range = grid.getRange('B2:D5');
 
   const height = range.getHeight();
 

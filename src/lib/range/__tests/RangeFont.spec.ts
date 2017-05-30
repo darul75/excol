@@ -15,7 +15,7 @@ const cfg: SheetConfig = {
 test('should handle font colors for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const blue = 'blue';
   const red = 'red';
 
@@ -53,7 +53,7 @@ test('should handle font colors for A2:B3', t => {
 test('should handle font family for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const fa1 = 'fa1';
   const fa2 = 'fa2';
 
@@ -91,7 +91,7 @@ test('should handle font family for A2:B3', t => {
 test('should handle font line for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const fl1 = 'fl1';
   const fl2 = 'fl2';
 
@@ -129,7 +129,7 @@ test('should handle font line for A2:B3', t => {
 test('should handle font size for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const fs1 = 14;
   const fs2 = 20;
 
@@ -167,7 +167,7 @@ test('should handle font size for A2:B3', t => {
 test('should handle font style for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const fs1 = 'fs1';
   const fs2 = 'fs2';
 
@@ -205,7 +205,7 @@ test('should handle font style for A2:B3', t => {
 test('should handle font weight for A2:B3', t => {
 
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'A2:B3'});
+  const range = grid.getRange('A2:B3');
   const fw1 = 'fw1';
   const fw2 = 'fw2';
 

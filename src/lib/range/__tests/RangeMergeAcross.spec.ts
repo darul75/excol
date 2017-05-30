@@ -16,7 +16,7 @@ test('should throw error on single cell', t => {
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B2'});
+  const range1 = grid.getRange('B2');
 
   const expected = Errors.INCORRECT_MERGE_SINGLE_CELL;
 
@@ -33,9 +33,9 @@ test('should merge B2:C2 width D2:E2', t => {
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B2:C2'});
-  const range2 = grid.getRange({A1: 'D2:E2'});
-  const range4 = grid.getRange({A1: 'B2:E2'});
+  const range1 = grid.getRange('B2:C2');
+  const range2 = grid.getRange('D2:E2');
+  const range4 = grid.getRange('B2:E2');
   range4.setValues([[0, 1, 2, 3]]);
 
   range1.mergeAcross();
@@ -53,7 +53,7 @@ test('should merge B2:C5', t => {
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B2:C5'});
+  const range1 = grid.getRange('B2:C5');
 
   range1.setValues([
     [0, 1],
@@ -77,8 +77,8 @@ test('should merge B2:C5', t => {
 test('can not merge cells with bigger merged range height inside already', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B4:C6'});
-  const range2 = grid.getRange({A1: 'B3:C6'});
+  const range1 = grid.getRange('B4:C6');
+  const range2 = grid.getRange('B3:C6');
 
   range1.merge();
 
@@ -98,8 +98,8 @@ test('should throw error if not overlaps but not contains', t => {
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B6:C7'});
-  const range2= grid.getRange({A1: 'A6:B8'});
+  const range1 = grid.getRange('B6:C7');
+  const range2= grid.getRange('A6:B8');
 
   range1.mergeAcross();
 
@@ -118,8 +118,8 @@ test('should throw error if merge horizontally across an existing vertically mer
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B7:B9'});
-  const range2= grid.getRange({A1: 'A7:B9'});
+  const range1 = grid.getRange('B7:B9');
+  const range2= grid.getRange('A7:B9');
 
   range1.mergeVertically();
 
@@ -138,8 +138,8 @@ test('should throw error if vertically across an existing horizontally merged se
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'A7:C8'});
-  const range2= grid.getRange({A1: 'A6:C9'});
+  const range1 = grid.getRange('A7:C8');
+  const range2= grid.getRange('A6:C9');
 
   range1.mergeAcross();
 
@@ -158,8 +158,8 @@ test('should remove existing merge when containing it', t => {
   const grid = new Sheet(cfg);
   cfg.cellValue = 0;
 
-  const range1 = grid.getRange({A1: 'B5:C5'});
-  const range2= grid.getRange({A1: 'B5:C6'});
+  const range1 = grid.getRange('B5:C5');
+  const range2= grid.getRange('B5:C6');
 
   range1.mergeAcross();
 
@@ -175,7 +175,7 @@ test('can merge cells with same merged range height inside already', t => {
 
   const grid = new Sheet(cfg);
   const range1 = grid.getRange({A1: 'B4:C4'});
-  const range2 = grid.getRange({A1: 'B5:C5'});
+  const range2 = grid.getRange('B5:C5');
   const range3 = grid.getRange({A1: 'B3:C8'});
 
   range1.mergeAcross();

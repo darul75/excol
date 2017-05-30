@@ -1,22 +1,15 @@
 import { test } from 'ava';
 import {
-  Range, Sheet, Spreadsheet, SpreadsheetApp, SpreadsheetAppConfig, DataValidationBuilder,
+  Range, Sheet, Spreadsheet, SpreadsheetApp, DataValidationBuilder,
   DataValidation, DataValidationCriteria
 } from 'excol';
 
 const name = 'newSpreadsheet';
 const name1 = 'newSpreadsheet1';
 
-const cfg: SpreadsheetAppConfig = {
-  numRows: 4,
-  numColumns: 4
-};
-
 test('should handle create new spreadsheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
-
-  const spreadsheet = spreadsheetApp.create(name);
+  const spreadsheet = SpreadsheetApp.create(name);
   const sheets = spreadsheet.getSheets();
 
   t.true(sheets.length === 1);
@@ -26,27 +19,23 @@ test('should handle create new spreadsheet', t => {
 
 test('should handle get active spreadsheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
-
-  const spreadsheet = spreadsheetApp.create(name);
+  const spreadsheet = SpreadsheetApp.create(name);
 
 
-  t.true(spreadsheetApp.getActive().getName() === name);
+  t.true(SpreadsheetApp.getActive().getName() === name);
 
 });
 
 test('should handle get active range', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
-
-  const spreadsheet = spreadsheetApp.create(name);
+  const spreadsheet = SpreadsheetApp.create(name);
 
   let range: Range = spreadsheet.getActiveRange();
 
   t.true(range.getLastRow() === 1001);
   t.true(range.getLastColumn() === 1001);
 
-  const newActiveRange = spreadsheet.getActiveSheet().getRange({A1: 'A1:B3'});
+  const newActiveRange = spreadsheet.getActiveSheet().getRange('A1:B3');
 
   spreadsheet.setActiveRange(newActiveRange);
 
@@ -59,9 +48,7 @@ test('should handle get active range', t => {
 
 test('should handle get active sheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
-
-  const spreadsheet = spreadsheetApp.create(name);
+  const spreadsheet = SpreadsheetApp.create(name);
 
   const secondSheet: Sheet = spreadsheet.insertSheet();
 
@@ -77,26 +64,22 @@ test('should handle get active sheet', t => {
 
 test('should handle get active spreadsheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
+  const spreadsheet = SpreadsheetApp.create(name);
+  SpreadsheetApp.create(name1);
 
-  const spreadsheet = spreadsheetApp.create(name);
-  spreadsheetApp.create(name1);
-
-  let ssheet: Spreadsheet = spreadsheetApp.getActiveSpreadsheet();
+  let ssheet: Spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
   t.true(ssheet.getName() === name1);
 
-  spreadsheetApp.setActiveSpreadsheet(spreadsheet);
+  SpreadsheetApp.setActiveSpreadsheet(spreadsheet);
 
-  t.true(spreadsheetApp.getActiveSpreadsheet().getName() === name);
+  t.true(SpreadsheetApp.getActiveSpreadsheet().getName() === name);
 
 });
 
 test('should handle flush', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
-
-  spreadsheetApp.flush();
+  SpreadsheetApp.flush();
 
   t.true(1 === 1);
 
@@ -104,9 +87,7 @@ test('should handle flush', t => {
 
 test('should handle newDataValidation', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
-
-  const builder: DataValidationBuilder = spreadsheetApp.newDataValidation();
+  const builder: DataValidationBuilder = SpreadsheetApp.newDataValidation();
 
   const validation: DataValidation = builder.requireDate().build();
 
@@ -116,14 +97,12 @@ test('should handle newDataValidation', t => {
 
 test('should handle setActiveSheet', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
+  const activeSheet = SpreadsheetApp.getActiveSheet();
 
-  const activeSheet = spreadsheetApp.getActiveSheet();
+  SpreadsheetApp.getActiveSpreadsheet().insertSheet();
+  SpreadsheetApp.getActiveSpreadsheet().insertSheet();
 
-  spreadsheetApp.getActiveSpreadsheet().insertSheet();
-  spreadsheetApp.getActiveSpreadsheet().insertSheet();
-
-  spreadsheetApp.setActiveSheet(activeSheet);
+  SpreadsheetApp.setActiveSheet(activeSheet);
 
   t.is(activeSheet.getName(), 'Sheet1');
 
@@ -131,13 +110,11 @@ test('should handle setActiveSheet', t => {
 
 test('should handle setActiveRange', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
+  const activeSheet = SpreadsheetApp.getActiveSheet();
 
-  const activeSheet = spreadsheetApp.getActiveSheet();
+  SpreadsheetApp.setActiveRange(activeSheet.getRange('A1:B3'));
 
-  spreadsheetApp.setActiveRange(activeSheet.getRange({A1: 'A1:B3'}));
-
-  const A1 = spreadsheetApp.getActiveRange().getA1Notation();
+  const A1 = SpreadsheetApp.getActiveRange().getA1Notation();
 
   t.is(A1, 'A1:B3');
 
@@ -145,8 +122,7 @@ test('should handle setActiveRange', t => {
 
 test('should handle getUi', t => {
 
-  const spreadsheetApp = new SpreadsheetApp(cfg);
-  spreadsheetApp.getUi();
+  SpreadsheetApp.getUi();
 
   t.is(2,2);
 

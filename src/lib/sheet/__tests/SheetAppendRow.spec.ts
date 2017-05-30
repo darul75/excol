@@ -13,7 +13,7 @@ const cfg: SheetConfig = {
 test('should append new line at the end', t => {
 
   const sheet = new Sheet(cfg);
-  const range = sheet.getRange({A1: 'A1:B2'});
+  const range = sheet.getRange('A1:B2');
   ;
   range.setValues([
     [1, 2],
@@ -24,7 +24,7 @@ test('should append new line at the end', t => {
 
   sheet.appendRow([5, 6]);
 
-  const range2 = sheet.getRange({A1: 'A1:B3'});
+  const range2 = sheet.getRange('A1:B3');
 
   t.deepEqual(range2.values,
     [

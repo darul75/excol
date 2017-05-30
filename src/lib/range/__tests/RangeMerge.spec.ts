@@ -14,8 +14,8 @@ const cfg: SheetConfig = {
 test('should range B3:C4 be contained in B2:C4', t => {
 
   const grid = new Sheet(cfg);
-  const outRange = grid.getRange({A1: 'B2:C4'});
-  const inRange = grid.getRange({A1: 'B3:C4'});
+  const outRange = grid.getRange('B2:C4');
+  const inRange = grid.getRange('B3:C4');
 
   const isContained = outRange.contains(inRange);
 
@@ -25,8 +25,8 @@ test('should range B3:C4 be contained in B2:C4', t => {
 test('should range A2:C5 be contained in B2:C4', t => {
 
   const grid = new Sheet(cfg);
-  const outRange = grid.getRange({A1: 'A2:C5'});
-  const inRange = grid.getRange({A1: 'B3:C4'});
+  const outRange = grid.getRange('A2:C5');
+  const inRange = grid.getRange('B3:C4');
 
   const isContained = outRange.contains(inRange);
 
@@ -36,8 +36,8 @@ test('should range A2:C5 be contained in B2:C4', t => {
 test('should range A2:D5 be contained in B2:C4', t => {
 
   const grid = new Sheet(cfg);
-  const outRange = grid.getRange({A1: 'A2:D5'});
-  const inRange = grid.getRange({A1: 'B3:C4'});
+  const outRange = grid.getRange('A2:D5');
+  const inRange = grid.getRange('B3:C4');
 
   const isContained = outRange.contains(inRange);
 
@@ -47,8 +47,8 @@ test('should range A2:D5 be contained in B2:C4', t => {
 test('should range A2:B4 not be contained in B2:C4', t => {
 
   const grid = new Sheet(cfg);
-  const outRange = grid.getRange({A1: 'A2:B4'});
-  const inRange = grid.getRange({A1: 'B3:C4'});
+  const outRange = grid.getRange('A2:B4');
+  const inRange = grid.getRange('B3:C4');
 
   const isContained = outRange.contains(inRange);
 
@@ -58,8 +58,8 @@ test('should range A2:B4 not be contained in B2:C4', t => {
 test('should range A2:B4 not be contained in B2:C4', t => {
 
   const grid = new Sheet(cfg);
-  const outRange = grid.getRange({A1: 'A2:B4'});
-  const inRange = grid.getRange({A1: 'B3:C4'});
+  const outRange = grid.getRange('A2:B4');
+  const inRange = grid.getRange('B3:C4');
 
   const isContained = outRange.contains(inRange);
 
@@ -69,8 +69,8 @@ test('should range A2:B4 not be contained in B2:C4', t => {
 test('should range B3:B4 not be contained in B2:C4', t => {
 
   const grid = new Sheet(cfg);
-  const outRange = grid.getRange({A1: 'B3:B4'});
-  const inRange = grid.getRange({A1: 'B3:C4'});
+  const outRange = grid.getRange('B3:B4');
+  const inRange = grid.getRange('B3:C4');
 
   const isContained = outRange.contains(inRange);
 
@@ -80,7 +80,7 @@ test('should range B3:B4 not be contained in B2:C4', t => {
 test('should not merge single range', t => {
 
   const grid = new Sheet(cfg);
-  const res = grid.getRange({A1: 'A1'});
+  const res = grid.getRange('A1');
 
   const fn = () => {
     res.merge();
@@ -96,11 +96,11 @@ test('should not merge single range', t => {
 test('can not merge uncompatible cells from merge from left', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'A3:B3'});
+  const range2 = grid.getRange('A3:B3');
 
   const fn = () => {
     range2.merge();
@@ -116,15 +116,15 @@ test('can not merge uncompatible cells from merge from left', t => {
 test('can merge cells from left', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'A2:C4'});
+  const range2 = grid.getRange('A2:C4');
 
   range2.merge();
 
-  const range3 = grid.getRange({A1: 'A1:C4'});
+  const range3 = grid.getRange('A1:C4');
 
   const expected = [
     [ { value: '0-0' }, { value: '0-1' }, { value: '0-2' } ],
@@ -140,11 +140,11 @@ test('can merge cells from left', t => {
 test('can not merge uncompatible cells from merge from right', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'C3:D3'});
+  const range2 = grid.getRange('C3:D3');
 
   const fn = () => {
     range2.merge();
@@ -159,15 +159,15 @@ test('can not merge uncompatible cells from merge from right', t => {
 test('can merge cells from right', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'B2:D4'});
+  const range2 = grid.getRange('B2:D4');
 
   range2.merge();
 
-  const range3 = grid.getRange({A1: 'A1:C4'});
+  const range3 = grid.getRange('A1:C4');
 
   const expected = [
     [ { value: '0-0' }, { value: '0-1' }, { value: '0-2' } ],
@@ -183,11 +183,11 @@ test('can merge cells from right', t => {
 test('can not merge uncompatible cells from merge from top', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'B2:B4'});
+  const range2 = grid.getRange('B2:B4');
 
   const fn = () => {
     range2.merge();
@@ -202,15 +202,15 @@ test('can not merge uncompatible cells from merge from top', t => {
 test('can merge cells from top', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'B2:C6'});
+  const range2 = grid.getRange('B2:C6');
 
   range2.merge();
 
-  const range3 = grid.getRange({A1: 'A1:C4'});
+  const range3 = grid.getRange('A1:C4');
 
   const expected = [
     [ { value: '0-0' }, { value: '0-1' }, { value: '0-2' } ],
@@ -226,11 +226,11 @@ test('can merge cells from top', t => {
 test('can not merge uncompatible cells from merge from bottom', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'B2:B5'});
+  const range2 = grid.getRange('B2:B5');
 
   const fn = () => {
     range2.merge();
@@ -245,15 +245,15 @@ test('can not merge uncompatible cells from merge from bottom', t => {
 test('can merge from bigger', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'A2:D5'});
+  const range2 = grid.getRange('A2:D5');
 
   range2.merge();
 
-  const range3 = grid.getRange({A1: 'A1:C4'});
+  const range3 = grid.getRange('A1:C4');
 
   const expected = [
     [ { value: '0-0' }, { value: '0-1' }, { value: '0-2' } ],
@@ -268,15 +268,15 @@ test('can merge from bigger', t => {
 test('can merge and erase multiple contained merges', t => {
 
   const grid = new Sheet(cfg);
-  const range1 = grid.getRange({A1: 'B3:C4'});
+  const range1 = grid.getRange('B3:C4');
 
   range1.merge();
 
-  const range2 = grid.getRange({A1: 'C5:D7'});
+  const range2 = grid.getRange('C5:D7');
 
   range2.merge();
 
-  const range3 = grid.getRange({A1: 'A2:E13'});
+  const range3 = grid.getRange('A2:E13');
 
   range3.merge();
 
@@ -289,7 +289,7 @@ test('can merge and verify values', t => {
 
   cfg.cellValue = 0;
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B3:C4'});
+  const range = grid.getRange('B3:C4');
 
   range.setValues([
     [1, 2],
@@ -311,7 +311,7 @@ test('for single merged range', t => {
 
   cfg.cellValue = 0;
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B3:C4'});
+  const range = grid.getRange('B3:C4');
 
   range.setValues([
     [1, 2],
@@ -333,11 +333,11 @@ test('should throw error for wrong single merged range', t => {
 
   cfg.cellValue = 0;
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B3:C4'});
+  const range = grid.getRange('B3:C4');
 
   range.merge();
 
-  const range2 = grid.getRange({A1: 'B3:B4'});
+  const range2 = grid.getRange('B3:B4');
 
   const fn = () => {
     range2.breakApart();
@@ -356,9 +356,9 @@ test('for multiple ranges merged', t => {
 
   cfg.cellValue = 0;
   const grid = new Sheet(cfg);
-  const range = grid.getRange({A1: 'B3:C4'});
-  const range2 = grid.getRange({A1: 'D3:E4'});
-  const range3 = grid.getRange({A1: 'B1:E4'});
+  const range = grid.getRange('B3:C4');
+  const range2 = grid.getRange('D3:E4'});
+  const range3 = grid.getRange('B1:E4'});
 
   range.merge();
   range2.merge();

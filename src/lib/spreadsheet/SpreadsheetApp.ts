@@ -23,7 +23,7 @@ const spreadsheetConfig: SpreadsheetAppConfig = {
 /**
  * SpreadsheetApp class.
  */
-export class SpreadsheetApp {
+export class App {
 
   private cfg: SpreadsheetAppConfig;
   private _active: Spreadsheet;
@@ -38,7 +38,7 @@ export class SpreadsheetApp {
    *
    * @param {object?} cfg Spreadsheet configuration
    */
-  constructor(cfg: SpreadsheetAppConfig) {
+  constructor(cfg?: SpreadsheetAppConfig) {
     this.cfg = cfg || spreadsheetConfig;
 
     this.init(this.cfg);
@@ -156,3 +156,5 @@ export class SpreadsheetApp {
     this._active = newActiveSpreadsheet;
   }
 }
+
+export const SpreadsheetApp = new App();

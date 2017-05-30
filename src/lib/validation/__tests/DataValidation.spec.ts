@@ -37,7 +37,7 @@ test('should throw error on bad NUMBER_EQUAL_TO', t => {
 
   const grid = new Sheet(cfg);
   const notation = 'B1';
-  const range = grid.getRange({A1: notation});
+  const range = grid.getRange(notation);
 
   const validation = new DataValidationBuilder().requireNumberEqualTo(2).build();
 
@@ -57,7 +57,7 @@ test('should throw error on bad multiple NUMBER_EQUAL_TO', t => {
 
   const grid = new Sheet(cfg);
   const notation = 'A1:B2';
-  const range = grid.getRange({A1: notation});
+  const range = grid.getRange(notation);
 
   const validation = new DataValidationBuilder().requireNumberEqualTo(2).build();
 
