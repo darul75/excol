@@ -19,20 +19,64 @@ What you may need is a tool to work locally and push back your changes to Google
 
 ## How to use
 
-Google app script language is Javascript, a kind of, not ECMA 5 but an old one with most basic native features.
+Google app script language is Javascript, a kind of, not ECMA 5 but an old one with most the basic necessary native features.
 
-With starter kit provided before, you can named your files with .js extensions and play with it in a NodeJS environment.
+With starter kit provided before, you can named your files with .js extensions and play with it in a NodeJS environment (Tests).
 
 Using a CJS manner, you just need to enhance your files a little bit this way.
 
-*script1.js*
+*MyFunctions.js*
+
+```javascript
 
 /**
  * NodeJS part for tests
  */
 if (typeof exports === 'object' && typeof module !== 'undefined') {
-
+  var excol = require('excol');
+  var SpreadsheetApp = excol.SpreadsheetApp;
 }
 
-function fn1() {
+function read() {
+  var activeSheet = SpreadsheetApp.getActiveSheet();
+  var range = activeSheet.getRange("A1:B2");
 }
+
+function write() {
+  var activeSheet = SpreadsheetApp.getActiveSheet();
+  var range2 = activeSheet.getRange(1,1,2,2);
+    range2.setValues([
+    [1,2],
+    [3,4]
+  ]);
+}
+
+/**
+ * NodeJS part for tests
+ **/
+if (typeof exports === 'object' && typeof module !== 'undefined') {
+  module.exports = {
+    read: read,
+    write: write
+  };
+  //
+  // module.exports = read; 
+}
+```
+
+*Main.js*
+
+```javascript
+/**
+ * NodeJS part for tests
+ */
+if (typeof exports === 'object' && typeof module !== 'undefined') {
+  var MyFunctions = require('MyFunctions');
+}
+
+function main() {
+  MyFunctions.read();
+  MyFunctions.write();
+}
+
+```
